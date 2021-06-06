@@ -11,7 +11,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 id   : 'apps.chat',
                 title: 'Chat',
                 type : 'basic',
-                icon : 'heroicons_outline:chat-alt',
+                icon : 'heroicons_outline:login',
                 link : '/apps/chat'
             }
         ]

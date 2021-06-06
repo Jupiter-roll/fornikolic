@@ -1,10 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { BooleanInput } from '@angular/cdk/coercion';
-import { Subject } from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FuseVerticalNavigationComponent } from '@fuse/components/navigation/vertical/vertical.component';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 import { FuseNavigationItem } from '@fuse/components/navigation/navigation.types';
+import {Select} from "@ngxs/store";
+import {ChannelState} from "../../../../../../app/store/channel/channel.state";
+import {ChannelModel} from "../../../../../../app/store/channel/channel.model";
 
 @Component({
     selector       : 'fuse-vertical-navigation-group-item',
@@ -21,6 +24,7 @@ export class FuseVerticalNavigationGroupItemComponent implements OnInit, OnDestr
     @Input() autoCollapse: boolean;
     @Input() item: FuseNavigationItem;
     @Input() name: string;
+    @Select(ChannelState.getChannelList) channels: Observable<ChannelModel[]>;
 
     private _fuseVerticalNavigationComponent: FuseVerticalNavigationComponent;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -55,6 +59,12 @@ export class FuseVerticalNavigationGroupItemComponent implements OnInit, OnDestr
             // Mark for check
             this._changeDetectorRef.markForCheck();
         });
+
+        this.channels.subscribe((res: any) => {
+            if (res) {
+                // this.item = res;
+            }
+        })
     }
 
     /**

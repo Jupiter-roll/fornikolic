@@ -70,7 +70,7 @@ export class FuseNavigationService
      */
     getNavigation(key: string): FuseNavigationItem[]
     {
-        return this._navigationStore.get(key) ?? [];
+        return this._navigationStore.get(key) ? []:[];
     }
 
     /**
