@@ -26,7 +26,7 @@ const routerConfig: ExtraOptions = {
     imports     : [
         BrowserModule,
         BrowserAnimationsModule,
-        RouterModule.forRoot(appRoutes, routerConfig),
+        RouterModule.forRoot(appRoutes, {relativeLinkResolution: 'legacy'}),
 
         // Fuse, FuseConfig & FuseMockAPI
         FuseModule,
