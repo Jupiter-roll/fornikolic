@@ -17,10 +17,24 @@ import {NgxsModule} from "@ngxs/store";
 import {ChannelState} from "./store/channel/channel.state";
 import {environment} from "../environments/environment";
 import {NgxsLoggerPluginModule} from "@ngxs/logger-plugin";
+import {BrowseChannelState} from "./store/browseChannel/browse.channel.state";
+import {TopicState} from "./store/topic/topic.state";
+import {MessageState} from "./store/message/message.state";
+import {SocketIoConfig, SocketIoModule} from "ngx-socket-io";
 
 const routerConfig: ExtraOptions = {
     scrollPositionRestoration: 'enabled',
     preloadingStrategy       : PreloadAllModules
+};
+
+const config: SocketIoConfig = {
+    url : environment.websocketUrl,
+    options: {
+        query: {
+            token: environment.authorizationToken
+        },
+        transports: ['websocket']
+    }
 };
 
 @NgModule({
@@ -48,10 +62,12 @@ const routerConfig: ExtraOptions = {
         // 3rd party modules that require global configuration via forRoot
         MarkdownModule.forRoot({}),
 
-        NgxsModule.forRoot([ChannelState], {
+        NgxsModule.forRoot([MessageState ,TopicState ,BrowseChannelState, ChannelState], {
             developmentMode: !environment.production
         }),
-        NgxsLoggerPluginModule.forRoot()
+        NgxsLoggerPluginModule.forRoot(),
+
+        SocketIoModule.forRoot(config)
     ],
     bootstrap   : [
         AppComponent
