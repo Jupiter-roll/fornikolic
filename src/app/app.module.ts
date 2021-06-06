@@ -12,6 +12,7 @@ import { mockApiServices } from 'app/mock-api';
 import { LayoutModule } from 'app/layout/layout.module';
 import { AppComponent } from 'app/app.component';
 import { appRoutes } from 'app/app.routing';
+import {ChannelModule} from "./modules/admin/apps/channel/channel.module";
 
 const routerConfig: ExtraOptions = {
     scrollPositionRestoration: 'enabled',
@@ -20,7 +21,7 @@ const routerConfig: ExtraOptions = {
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
     ],
     imports     : [
         BrowserModule,
@@ -37,6 +38,8 @@ const routerConfig: ExtraOptions = {
 
         // Layout module of your application
         LayoutModule,
+
+        ChannelModule,
 
         // 3rd party modules that require global configuration via forRoot
         MarkdownModule.forRoot({})

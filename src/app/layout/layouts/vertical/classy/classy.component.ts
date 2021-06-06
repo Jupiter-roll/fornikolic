@@ -5,6 +5,8 @@ import { takeUntil } from 'rxjs/operators';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { InitialData } from 'app/app.types';
+import {NewChannelComponent} from "../../../../modules/admin/apps/channel/new-channel/new-channel.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
     selector     : 'classy-layout',
@@ -24,7 +26,8 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
         private _activatedRoute: ActivatedRoute,
         private _router: Router,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
-        private _fuseNavigationService: FuseNavigationService
+        private _fuseNavigationService: FuseNavigationService,
+        private _matDialog: MatDialog,
     )
     {
     }
@@ -94,5 +97,12 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
             // Toggle the opened status
             navigation.toggle();
         }
+    }
+
+    openNewChannel(): void {
+        const dialogRef = this._matDialog.open(NewChannelComponent);
+        dialogRef.afterClosed().subscribe(() => {
+            console.log('new channel close')
+        })
     }
 }

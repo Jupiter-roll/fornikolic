@@ -20,6 +20,7 @@
                 <user-menu [showAvatar]="false"></user-menu>
             </div>
         </div>
+
         <!-- User -->
         <div class="flex flex-col items-center w-full p-4">
             <div class="relative w-24 h-24">
@@ -33,6 +34,7 @@
                     *ngIf="!data.user.avatar"
                     [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
             </div>
+
             <div class="flex flex-col items-center justify-center w-full mt-6">
                 <div class="w-full whitespace-nowrap overflow-ellipsis overflow-hidden text-center leading-normal font-medium">
                     {{data.user.name}}
@@ -45,6 +47,22 @@
     </ng-container>
     <!-- Navigation footer hook -->
     <ng-container fuseVerticalNavigationContentFooter>
+
+        <div class="fuse-vertical-navigation-item-wrapper">
+            <div class="fuse-vertical-navigation-item flex m-3 cursor-pointer"
+                 (click)="openNewChannel()"
+            >
+                <mat-icon
+                    class="ml-3 mr-3"
+                    [svgIcon]="'heroicons_solid:plus-circle'"
+                >
+                </mat-icon>
+                <div class="fuse-vertical-navigation-item-title-wrapper">
+                    Add new channels
+                </div>
+            </div>
+        </div>
+
         <div class="flex flex-0 items-center justify-center h-16 pr-6 pl-2 mt-2 mb-4 opacity-12">
             <img
                 class="max-w-36"
