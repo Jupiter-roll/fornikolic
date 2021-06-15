@@ -97,8 +97,8 @@ export class ChatsComponent implements OnInit, OnDestroy
                     'channelId': response.id,
                     'pageNum': this.pageNum
                 })).subscribe(res => {
-                    console.log(res, '=>>get topci')
                     this.getTopics = res.topicList.topicList
+                    this._changeDetectorRef.detectChanges()
                 })
             } else {
                 this.getTopics = [];
@@ -107,7 +107,8 @@ export class ChatsComponent implements OnInit, OnDestroy
 
         this.getTopicsList.subscribe(res => {
             if (res) {
-                this.getTopics = res
+                this.getTopics = res;
+                this._changeDetectorRef.detectChanges()
             }
         });
 

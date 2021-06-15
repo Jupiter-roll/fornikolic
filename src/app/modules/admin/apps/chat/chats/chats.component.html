@@ -72,39 +72,33 @@
                                                 'bg-primary-50 dark:bg-hover': selectedChat && selectedChat.id === topic.id}"
                                     [routerLink]="[topic.id]">
                                     <div class="relative flex flex-0 items-center justify-center w-10 h-10">
-                                        <ng-container *ngIf="topic.unreadCount > 0">
-                                            <div
-                                                class="absolute bottom-0 right-0 flex-0 w-2 h-2 -ml-0.5 rounded-full ring-2 ring-bg-card dark:ring-gray-900 bg-primary dark:bg-primary-500 text-on-primary"
-                                                [class.ring-primary-50]="selectedChat && selectedChat.id === topic.id"></div>
-                                        </ng-container>
-                                        <ng-container *ngIf="topic.contact.avatar">
-                                            <img
-                                                class="w-full h-full rounded-full object-cover"
-                                                [src]="topic.contact.avatar"
-                                                alt="Contact avatar"/>
-                                        </ng-container>
-                                        <ng-container *ngIf="!topic.contact.avatar">
+                                        <ng-container>
                                             <div class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                                                {{topic.contact.name.charAt(0)}}
+                                                {{topic.data.name.charAt(0)}}
                                             </div>
                                         </ng-container>
                                     </div>
                                     <div class="min-w-0 ml-4">
                                         <div class="font-medium leading-5 truncate">{{topic.data.name}}</div>
                                         <div
-                                            class="leading-5 truncate text-secondary"
-                                            [class.text-primary]="topic.unreadCount > 0"
-                                            [class.dark:text-primary-500]="topic.unreadCount > 0">
-                                            {{topic.lastMessage}}
+                                            class="leading-5 truncate text-secondary text-primary-500"
+                                            [class.text-primary]="topic.data.status > 0"
+                                            [class.dark:text-primary-500]="topic.data.status > 0">
+                                            {{topic.data.status}}
                                         </div>
                                     </div>
                                     <div class="flex flex-col items-end self-start ml-auto pl-2">
-                                        <div class="text-sm leading-5 text-secondary">{{topic.lastMessageAt}}</div>
-                                        <ng-container *ngIf="topic.muted">
+                                        <div class="text-sm leading-5 text-secondary">{{topic.system.updatedAt.split('T')[0]}}</div>
+                                        <ng-container *ngIf="topic.data.system?.model">
                                             <mat-icon
                                                 class="icon-size-5 text-hint"
                                                 [svgIcon]="'heroicons_solid:volume-off'"></mat-icon>
                                         </ng-container>
+                                    </div>
+                                    <div class="flex flex-col items-end self-start ml-auto pl-2">
+                                        <mat-icon
+                                            class="icon-size-5 text-hint"
+                                            [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
                                     </div>
                                 </div>
                             </ng-container>
@@ -126,7 +120,7 @@
             </ng-template>
 
             <!-- Conversation -->
-            <ng-container *ngIf="chats && chats.length > 0">
+            <ng-container *ngIf="getTopics && getTopics.length > 0">
                 <div
                     class="flex-auto border-l"
                     [ngClass]="{'z-20 absolute inset-0 lg:static lg:inset-auto flex': selectedChat && selectedChat.id,
