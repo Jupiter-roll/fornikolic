@@ -1,11 +1,17 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { Subject } from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Chat, Profile } from 'app/modules/admin/apps/chat/chat.types';
 import { ChatService } from 'app/modules/admin/apps/chat/chat.service';
 import {NewChannelComponent} from "../../channel/new-channel/new-channel.component";
 import {NewTopicComponent} from "../../topic/new-topic/new-topic.component";
 import {MatDialog} from "@angular/material/dialog";
+import {ChannelModel} from "../../../../../store/channel/channel.model";
+import {ChannelState} from "../../../../../store/channel/channel.state";
+import {Select, Store} from "@ngxs/store";
+import {FetchTopic} from "../../../../../store/topic/topic.actions";
+import {TopicModel} from "../../../../../store/topic/topic.model";
+import {TopicState} from "../../../../../store/topic/topic.state";
 
 @Component({
     selector       : 'chat-chats',
@@ -22,7 +28,17 @@ export class ChatsComponent implements OnInit, OnDestroy
     profile: Profile;
     selectedChat: Chat;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-
+    @Select(ChannelState.getSelectedChannel) getSelectedChannel: Observable<ChannelModel>;
+    @Select(TopicState.getTopicsList) getTopicsList: Observable<TopicModel>;
+    @Select(TopicState.getSelectedTopic) getSelectedTopic: Observable<TopicModel>;
+    @Select(TopicState.getTopicPage) getTopicPage: Observable<number>;
+    @Select(TopicState.getTopicTotalPage) getTopicTotalPage: Observable<number>;
+    channelId: string;
+    pageNum: number = 1 ;
+    totalNum: number;
+    status: Boolean = false;
+    getTopics: any;
+    selectedTopic: TopicModel;
     /**
      * Constructor
      */
@@ -30,6 +46,7 @@ export class ChatsComponent implements OnInit, OnDestroy
         private _chatService: ChatService,
         private _changeDetectorRef: ChangeDetectorRef,
         private _matDialog: MatDialog,
+        private store: Store,
     )
     {
     }
@@ -72,6 +89,43 @@ export class ChatsComponent implements OnInit, OnDestroy
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
+
+        this.getSelectedChannel.subscribe(response => {
+            if (response) {
+                this.channelId = response.id;
+                this.store.dispatch(new FetchTopic({
+                    'channelId': response.id,
+                    'pageNum': this.pageNum
+                })).subscribe(res => {
+                    console.log(res, '=>>get topci')
+                    this.getTopics = res.topicList.topicList
+                })
+            } else {
+                this.getTopics = [];
+            }
+        });
+
+        this.getTopicsList.subscribe(res => {
+            if (res) {
+                this.getTopics = res
+            }
+        });
+
+        this.getTopicTotalPage
+            .subscribe(res => {
+                this.totalNum = res;
+            });
+        this.getSelectedTopic.subscribe(response => {
+            if (response) {
+                this.selectedTopic = response;
+                for (let items of this.getTopics) {
+                    if (items.id === response.id) {
+                        items = Object.assign({active:true}, items);
+                        this._changeDetectorRef.detectChanges();
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -103,18 +157,6 @@ export class ChatsComponent implements OnInit, OnDestroy
         }
 
         this.filteredChats = this.chats.filter(chat => chat.contact.name.toLowerCase().includes(query.toLowerCase()));
-    }
-
-    /**
-     * Open the new chat sidebar
-     */
-    openNewChat(): void
-    {
-        this.drawerComponent = 'new-chat';
-        this.drawerOpened = true;
-
-        // Mark for check
-        this._changeDetectorRef.markForCheck();
     }
 
     /**
