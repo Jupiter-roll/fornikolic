@@ -21,6 +21,8 @@ import {BrowseChannelState} from "./store/browseChannel/browse.channel.state";
 import {TopicState} from "./store/topic/topic.state";
 import {MessageState} from "./store/message/message.state";
 import {SocketIoConfig, SocketIoModule} from "ngx-socket-io";
+import { TopicComponent } from './modules/admin/apps/topic/topic.component';
+import {TopicModule} from "./modules/admin/apps/topic/topic.module";
 
 const routerConfig: ExtraOptions = {
     scrollPositionRestoration: 'enabled',
@@ -58,7 +60,7 @@ const config: SocketIoConfig = {
         LayoutModule,
 
         ChannelModule,
-
+        TopicModule,
         // 3rd party modules that require global configuration via forRoot
         MarkdownModule.forRoot({}),
 

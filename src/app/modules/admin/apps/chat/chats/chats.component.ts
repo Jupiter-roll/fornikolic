@@ -3,6 +3,9 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Chat, Profile } from 'app/modules/admin/apps/chat/chat.types';
 import { ChatService } from 'app/modules/admin/apps/chat/chat.service';
+import {NewChannelComponent} from "../../channel/new-channel/new-channel.component";
+import {NewTopicComponent} from "../../topic/new-topic/new-topic.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
     selector       : 'chat-chats',
@@ -25,7 +28,8 @@ export class ChatsComponent implements OnInit, OnDestroy
      */
     constructor(
         private _chatService: ChatService,
-        private _changeDetectorRef: ChangeDetectorRef
+        private _changeDetectorRef: ChangeDetectorRef,
+        private _matDialog: MatDialog,
     )
     {
     }
@@ -134,5 +138,12 @@ export class ChatsComponent implements OnInit, OnDestroy
     trackByFn(index: number, item: any): any
     {
         return item.id || index;
+    };
+
+    openNewTopic = () => {
+        const dialogRef = this._matDialog.open(NewTopicComponent);
+        dialogRef.afterClosed().subscribe(() => {
+            console.log('new topic close')
+        })
     }
 }

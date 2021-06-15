@@ -33,63 +33,14 @@
                     <!-- Header -->
                     <div class="flex flex-col flex-0 py-4 px-8 border-b bg-gray-50 dark:bg-transparent">
                         <div class="flex items-center">
-                            <div
-                                class="flex items-center mr-1 cursor-pointer"
-                                (click)="openProfile()">
-                                <div class="w-10 h-10">
-                                    <ng-container *ngIf="profile.avatar">
-                                        <img
-                                            class="object-cover w-full h-full rounded-full object-cover"
-                                            [src]="profile.avatar"
-                                            alt="Profile avatar"/>
-                                    </ng-container>
-                                    <ng-container *ngIf="!profile.avatar">
-                                        <div class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                                            {{profile.name.charAt(0)}}
-                                        </div>
-                                    </ng-container>
-                                </div>
-                                <div class="ml-4 font-medium truncate">{{profile.name}}</div>
+                            <div class="flex items-center mr-1 cursor-pointer">
+                                <div class="ml-4 font-medium truncate text-2xl">Topic</div>
                             </div>
                             <button
                                 class="ml-auto"
                                 mat-icon-button
-                                (click)="openNewChat()">
+                                (click)="openNewTopic()">
                                 <mat-icon [svgIcon]="'heroicons_outline:plus-circle'"></mat-icon>
-                            </button>
-                            <button
-                                class="ml-1 -mr-4"
-                                mat-icon-button
-                                [matMenuTriggerFor]="chatsHeaderMenu">
-                                <mat-icon [svgIcon]="'heroicons_outline:dots-vertical'"></mat-icon>
-                                <mat-menu #chatsHeaderMenu>
-                                    <button mat-menu-item>
-                                        <mat-icon [svgIcon]="'heroicons_outline:user-group'"></mat-icon>
-                                        New group
-                                    </button>
-                                    <button mat-menu-item>
-                                        <mat-icon [svgIcon]="'heroicons_outline:chat-alt-2'"></mat-icon>
-                                        Create a room
-                                    </button>
-                                    <button
-                                        mat-menu-item
-                                        (click)="openProfile()">
-                                        <mat-icon [svgIcon]="'heroicons_outline:user-circle'"></mat-icon>
-                                        Profile
-                                    </button>
-                                    <button mat-menu-item>
-                                        <mat-icon [svgIcon]="'heroicons_outline:archive'"></mat-icon>
-                                        Archived
-                                    </button>
-                                    <button mat-menu-item>
-                                        <mat-icon [svgIcon]="'heroicons_outline:star'"></mat-icon>
-                                        Starred
-                                    </button>
-                                    <button mat-menu-item>
-                                        <mat-icon [svgIcon]="'heroicons_outline:cog'"></mat-icon>
-                                        Settings
-                                    </button>
-                                </mat-menu>
                             </button>
                         </div>
                         <!-- Search -->
