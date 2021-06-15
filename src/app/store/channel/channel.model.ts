@@ -24,4 +24,5 @@ export class ChannelModel {
         settings?: string;
     };
     active?: boolean;
+    type?: string;
 }

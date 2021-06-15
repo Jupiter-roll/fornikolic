@@ -22,10 +22,9 @@ export class FuseVerticalNavigationGroupItemComponent implements OnInit, OnDestr
     /* eslint-enable @typescript-eslint/naming-convention */
 
     @Input() autoCollapse: boolean;
-    @Input() item: FuseNavigationItem;
+    @Input() item: any;
     @Input() name: string;
     @Select(ChannelState.getChannelList) channels: Observable<ChannelModel[]>;
-
     private _fuseVerticalNavigationComponent: FuseVerticalNavigationComponent;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -52,19 +51,14 @@ export class FuseVerticalNavigationGroupItemComponent implements OnInit, OnDestr
         this._fuseVerticalNavigationComponent = this._fuseNavigationService.getComponent(this.name);
 
         // Subscribe to onRefreshed on the navigation component
-        this._fuseVerticalNavigationComponent.onRefreshed.pipe(
-            takeUntil(this._unsubscribeAll)
-        ).subscribe(() => {
+        // this._fuseVerticalNavigationComponent.onRefreshed.pipe(
+        //     takeUntil(this._unsubscribeAll)
+        // ).subscribe(() => {
+        //
+        //     // Mark for check
+        //     this._changeDetectorRef.markForCheck();
+        // });
 
-            // Mark for check
-            this._changeDetectorRef.markForCheck();
-        });
-
-        this.channels.subscribe((res: any) => {
-            if (res) {
-                // this.item = res;
-            }
-        })
     }
 
     /**

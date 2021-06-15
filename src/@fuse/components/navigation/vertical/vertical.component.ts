@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, E
 import { animate, AnimationBuilder, AnimationPlayer, style } from '@angular/animations';
 import { NavigationEnd, Router } from '@angular/router';
 import { ScrollStrategy, ScrollStrategyOptions } from '@angular/cdk/overlay';
-import {merge, ReplaySubject, Subject, Subscription} from 'rxjs';
+import {merge, Observable, ReplaySubject, Subject, Subscription} from 'rxjs';
 import { delay, filter, takeUntil } from 'rxjs/operators';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseNavigationItem, FuseVerticalNavigationAppearance, FuseVerticalNavigationMode, FuseVerticalNavigationPosition } from '@fuse/components/navigation/navigation.types';
@@ -10,6 +10,9 @@ import { FuseNavigationService } from '@fuse/components/navigation/navigation.se
 import { FuseScrollbarDirective } from '@fuse/directives/scrollbar/scrollbar.directive';
 import { FuseUtilsService } from '@fuse/services/utils/utils.service';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import {Select} from "@ngxs/store";
+import {ChannelState} from "../../../../app/store/channel/channel.state";
+import {ChannelModel} from "../../../../app/store/channel/channel.model";
 
 @Component({
     selector       : 'fuse-vertical-navigation',
@@ -27,13 +30,13 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
     static ngAcceptInputType_opened: BooleanInput;
     static ngAcceptInputType_transparentOverlay: BooleanInput;
     /* eslint-enable @typescript-eslint/naming-convention */
-
+    channelItem: any;
     @Input() appearance: FuseVerticalNavigationAppearance = 'default';
     @Input() autoCollapse: boolean = true;
     @Input() inner: boolean = false;
     @Input() mode: FuseVerticalNavigationMode = 'side';
     @Input() name: string = this._fuseUtilsService.randomId();
-    @Input() navigation: FuseNavigationItem[];
+    @Input() navigation: any;
     @Input() opened: boolean = true;
     @Input() position: FuseVerticalNavigationPosition = 'left';
     @Input() transparentOverlay: boolean = false;
@@ -42,7 +45,7 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
     @Output() readonly openedChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() readonly positionChanged: EventEmitter<FuseVerticalNavigationPosition> = new EventEmitter<FuseVerticalNavigationPosition>();
     @ViewChild('navigationContent') private _navigationContentEl: ElementRef;
-
+    @Select(ChannelState.getChannelList) channels: Observable<ChannelModel[]>;
     activeAsideItemId: string | null = null;
     onCollapsableItemCollapsed: ReplaySubject<FuseNavigationItem> = new ReplaySubject<FuseNavigationItem>(1);
     onCollapsableItemExpanded: ReplaySubject<FuseNavigationItem> = new ReplaySubject<FuseNavigationItem>(1);
@@ -291,6 +294,12 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
      */
     ngOnInit(): void
     {
+        this.channels.subscribe((res: any) => {
+            if (res) {
+                this.channelItem = res;
+                this._changeDetectorRef.detectChanges();
+            }
+        });
         // Make sure the name input is not an empty string
         if ( this.name === '' )
         {
@@ -322,6 +331,7 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
                     this.closeAside();
                 }
             });
+
     }
 
     /**

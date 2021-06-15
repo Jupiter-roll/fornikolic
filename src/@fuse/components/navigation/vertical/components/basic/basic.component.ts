@@ -15,7 +15,7 @@ import { FuseUtilsService } from '@fuse/services/utils/utils.service';
 })
 export class FuseVerticalNavigationBasicItemComponent implements OnInit, OnDestroy
 {
-    @Input() item: FuseNavigationItem;
+    @Input() item: any;
     @Input() name: string;
 
     isActiveMatchOptions: IsActiveMatchOptions;
