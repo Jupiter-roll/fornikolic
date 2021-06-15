@@ -46,6 +46,7 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
     @Output() readonly positionChanged: EventEmitter<FuseVerticalNavigationPosition> = new EventEmitter<FuseVerticalNavigationPosition>();
     @ViewChild('navigationContent') private _navigationContentEl: ElementRef;
     @Select(ChannelState.getChannelList) channels: Observable<ChannelModel[]>;
+    @Select(ChannelState.getSelectedChannel) selectedChannel: Observable<ChannelModel>;
     activeAsideItemId: string | null = null;
     onCollapsableItemCollapsed: ReplaySubject<FuseNavigationItem> = new ReplaySubject<FuseNavigationItem>(1);
     onCollapsableItemExpanded: ReplaySubject<FuseNavigationItem> = new ReplaySubject<FuseNavigationItem>(1);
@@ -300,6 +301,24 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
                 this._changeDetectorRef.detectChanges();
             }
         });
+
+        this.selectedChannel.subscribe(res => {
+            if (res) {
+                let data = [];
+                for (let item of this.channelItem) {
+                    if (item.active === undefined) {
+                        item = item.id === res.id ?
+                            Object.assign({active: true}, item) :
+                            Object.assign({active: false}, item)
+                    } else {
+                        item.active = item.id === res.id
+                    }
+                    data.push(item)
+                }
+                this.channelItem = data;
+               this._changeDetectorRef.detectChanges();
+            }
+        })
         // Make sure the name input is not an empty string
         if ( this.name === '' )
         {

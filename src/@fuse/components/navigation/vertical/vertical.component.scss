@@ -2,3 +2,9 @@
 @import 'styles/appearances/compact';
 @import 'styles/appearances/dense';
 @import 'styles/appearances/thin';
+.fuse-vertical-navigation-item-active {
+    background-color: rgba(255,255,255,0.1);
+}
+.display-inherit {
+    display: inherit!important;
+}

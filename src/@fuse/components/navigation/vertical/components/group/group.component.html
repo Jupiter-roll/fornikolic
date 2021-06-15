@@ -4,8 +4,11 @@
     [class.fuse-vertical-navigation-item-has-subtitle]="'subtitle'"
     [ngClass]="item.data.title?.wrapper">
 
-    <div class="fuse-vertical-navigation-item">
-
+    <a class="fuse-vertical-navigation-item cursor-pointer"
+       [ngClass]="activeStatus?'fuse-vertical-navigation-item-active':''"  (click)="sideClick(item.id)">
+       <ng-container *ngTemplateOutlet="itemContent"></ng-container>
+    </a>
+    <ng-template #itemContent>
         <!-- Icon -->
         <mat-icon
             class="fuse-vertical-navigation-item-icon mr-3 icon-size-1" style="display: inherit!important;"
@@ -29,15 +32,14 @@
 
         <!-- Badge -->
         <div
-            class="fuse-vertical-navigation-item-badge"
-            *ngIf="item.data.stats">
+            class="fuse-vertical-navigation-item-badge" style="display: inherit!important;"
+            *ngIf="item.data['stats']">
             <div
-                class="fuse-vertical-navigation-item-badge-content ">
-                {{item.data.stats.usercount}}
+                class="fuse-vertical-navigation-item-badge-content px-2 bg-pink-600 text-white rounded-full ">
+                {{item.data['stats']['userCount']}}
             </div>
         </div>
-
-    </div>
+    </ng-template>
 
 </div>
 

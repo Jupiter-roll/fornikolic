@@ -5,9 +5,10 @@ import { takeUntil } from 'rxjs/operators';
 import { FuseVerticalNavigationComponent } from '@fuse/components/navigation/vertical/vertical.component';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 import { FuseNavigationItem } from '@fuse/components/navigation/navigation.types';
-import {Select} from "@ngxs/store";
+import {Select, Store} from "@ngxs/store";
 import {ChannelState} from "../../../../../../app/store/channel/channel.state";
 import {ChannelModel} from "../../../../../../app/store/channel/channel.model";
+import {ChangeChannel} from "../../../../../../app/store/channel/channel.actions";
 
 @Component({
     selector       : 'fuse-vertical-navigation-group-item',
@@ -20,10 +21,10 @@ export class FuseVerticalNavigationGroupItemComponent implements OnInit, OnDestr
     /* eslint-disable @typescript-eslint/naming-convention */
     static ngAcceptInputType_autoCollapse: BooleanInput;
     /* eslint-enable @typescript-eslint/naming-convention */
-
     @Input() autoCollapse: boolean;
     @Input() item: any;
     @Input() name: string;
+    @Input() activeStatus: boolean;
     @Select(ChannelState.getChannelList) channels: Observable<ChannelModel[]>;
     private _fuseVerticalNavigationComponent: FuseVerticalNavigationComponent;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -33,7 +34,8 @@ export class FuseVerticalNavigationGroupItemComponent implements OnInit, OnDestr
      */
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
-        private _fuseNavigationService: FuseNavigationService
+        private _fuseNavigationService: FuseNavigationService,
+        private store: Store,
     )
     {
     }
@@ -49,16 +51,6 @@ export class FuseVerticalNavigationGroupItemComponent implements OnInit, OnDestr
     {
         // Get the parent navigation component
         this._fuseVerticalNavigationComponent = this._fuseNavigationService.getComponent(this.name);
-
-        // Subscribe to onRefreshed on the navigation component
-        // this._fuseVerticalNavigationComponent.onRefreshed.pipe(
-        //     takeUntil(this._unsubscribeAll)
-        // ).subscribe(() => {
-        //
-        //     // Mark for check
-        //     this._changeDetectorRef.markForCheck();
-        // });
-
     }
 
     /**
@@ -71,10 +63,9 @@ export class FuseVerticalNavigationGroupItemComponent implements OnInit, OnDestr
         this._unsubscribeAll.complete();
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
+    ngChange() {
+        console.log(this.item, '=')
+    }
     /**
      * Track by function for ngFor loops
      *
@@ -84,5 +75,9 @@ export class FuseVerticalNavigationGroupItemComponent implements OnInit, OnDestr
     trackByFn(index: number, item: any): any
     {
         return item.id || index;
+    };
+
+    sideClick = (id) => {
+        this.store.dispatch(new ChangeChannel({id: id}))
     }
 }
