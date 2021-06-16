@@ -9,9 +9,10 @@ import {MatDialog} from "@angular/material/dialog";
 import {ChannelModel} from "../../../../../store/channel/channel.model";
 import {ChannelState} from "../../../../../store/channel/channel.state";
 import {Select, Store} from "@ngxs/store";
-import {FetchTopic} from "../../../../../store/topic/topic.actions";
+import {ChangeTopic, FetchTopic} from "../../../../../store/topic/topic.actions";
 import {TopicModel} from "../../../../../store/topic/topic.model";
 import {TopicState} from "../../../../../store/topic/topic.state";
+import {FetchMessage} from "../../../../../store/message/message.actions";
 
 @Component({
     selector       : 'chat-chats',
@@ -188,5 +189,11 @@ export class ChatsComponent implements OnInit, OnDestroy
         dialogRef.afterClosed().subscribe(() => {
             console.log('new topic close')
         })
+    };
+
+    getChat = (data) => {
+        this.store.dispatch(new ChangeTopic(data));
+        this.store.dispatch(new FetchMessage(data.id));
+
     }
 }

@@ -1,6 +1,6 @@
 <div class="flex flex-col flex-auto overflow-y-auto lg:overflow-hidden bg-card dark:bg-default">
 
-    <ng-container *ngIf="chat; else selectChatOrStartNew">
+    <ng-container *ngIf="selectedChat; else selectChatOrStartNew">
 
         <mat-drawer-container
             class="flex-auto h-full"
@@ -15,10 +15,7 @@
                 [(opened)]="drawerOpened"
                 #drawer>
 
-                <!-- Contact info -->
-                <chat-contact-info
-                    [drawer]="drawer"
-                    [chat]="chat"></chat-contact-info>
+
             </mat-drawer>
 
             <!-- Drawer content -->
@@ -41,19 +38,13 @@
                         class="flex items-center ml-2 lg:ml-0 mr-2 cursor-pointer"
                         (click)="openContactInfo()">
                         <div class="relative flex flex-0 items-center justify-center w-10 h-10">
-                            <ng-container *ngIf="chat.contact.avatar">
-                                <img
-                                    class="w-full h-full rounded-full object-cover"
-                                    [src]="chat.contact.avatar"
-                                    alt="Contact avatar"/>
-                            </ng-container>
-                            <ng-container *ngIf="!chat.contact.avatar">
+                            <ng-container>
                                 <div class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                                    {{chat.contact.name.charAt(0)}}
+                                    {{topic?.data.name.charAt(0)}}
                                 </div>
                             </ng-container>
                         </div>
-                        <div class="ml-4 text-lg font-medium leading-5 truncate">{{chat.contact.name}}</div>
+                        <div class="ml-4 text-lg font-medium leading-5 truncate uppercase">{{topic?.data.name}}</div>
                     </div>
 
                     <button
@@ -75,13 +66,9 @@
                             <button
                                 mat-menu-item
                                 (click)="toggleMuteNotifications()">
-                                <ng-container *ngIf="!chat.muted">
+                                <ng-container >
                                     <mat-icon [svgIcon]="'heroicons_outline:volume-off'"></mat-icon>
                                     Mute notifications
-                                </ng-container>
-                                <ng-container *ngIf="chat.muted">
-                                    <mat-icon [svgIcon]="'heroicons_outline:volume-up'"></mat-icon>
-                                    Unmute notifications
                                 </ng-container>
                             </button>
                             <button mat-menu-item>
@@ -99,55 +86,54 @@
 
                 <!-- Conversation -->
                 <div class="flex overflow-y-auto flex-col-reverse">
-                    <div class="flex flex-col flex-auto flex-shrink p-6 bg-card dark:bg-transparent">
-                        <ng-container *ngFor="let message of chat.messages; let i = index; let first = first; let last = last; trackBy: trackByFn">
+                    <div class="flex flex-col flex-auto flex-shrink p-6 bg-card dark:bg-transparent" style="height: 92vh!important;">
+                        <ng-container *ngFor="let message of selectedChat; let i = index; let first = first; let last = last; trackBy: trackByFn">
                             <!-- Start of the day -->
-                            <ng-container *ngIf="first || (chat.messages[i - 1].createdAt | date:'d') !== (message.createdAt | date:'d')">
+                            <ng-container *ngIf="first || (message.system.updatedAt | date:'d') !== (message.system.updatedAt | date:'d')">
                                 <div class="flex items-center justify-center my-3 -mx-6">
                                     <div class="flex-auto border-b"></div>
                                     <div class="flex-0 mx-4 text-sm font-medium leading-5 text-secondary">
-                                        {{message.createdAt | date: 'longDate'}}
+                                        {{message.system.createdAt | date: 'longDate'}}
                                     </div>
                                     <div class="flex-auto border-b"></div>
                                 </div>
                             </ng-container>
                             <div
                                 class="flex flex-col"
-                                [ngClass]="{'items-end': message.isMine,
-                                        'items-start': !message.isMine,
-                                        'mt-0.5': i > 0 && chat.messages[i - 1].isMine === message.isMine,
-                                        'mt-3': i > 0 && chat.messages[i - 1].isMine !== message.isMine}">
+                                [ngClass]="{'items-end': message.system.userId,
+                                        'items-start': !message.system.userId,
+                                        'mt-0.5': i > 0 && message.system.userId === user,
+                                        'mt-3': i > 0 && message.system.userId !== user}">
                                 <!-- Bubble -->
                                 <div
                                     class="relative max-w-3/4 px-3 py-2 rounded-lg"
-                                    [ngClass]="{'bg-blue-500 text-blue-50': message.isMine,
-                                            'bg-gray-500 text-gray-50': !message.isMine}">
+                                    [ngClass]="{'bg-blue-500 text-blue-50': message.system.userId,
+                                            'bg-gray-500 text-gray-50': !message.system.userId}">
                                     <!-- Speech bubble tail -->
-                                    <ng-container *ngIf="last || chat.messages[i + 1].isMine !== message.isMine">
+                                    <ng-container *ngIf="last || message.system.userId !== user">
                                         <div
                                             class="absolute bottom-0 w-3 transform"
-                                            [ngClass]="{'text-blue-500 -right-1 -mr-px mb-px': message.isMine,
-                                                    'text-gray-500 -left-1 -ml-px mb-px -scale-x-1': !message.isMine}">
+                                            [ngClass]="{'text-blue-500 -right-1 -mr-px mb-px': message.system.userId,
+                                                    'text-gray-500 -left-1 -ml-px mb-px -scale-x-1': !message.system.userId}">
                                             <ng-container *ngTemplateOutlet="speechBubbleExtension"></ng-container>
                                         </div>
                                     </ng-container>
                                     <!-- Message -->
                                     <div
                                         class="min-w-4 leading-5"
-                                        [innerHTML]="message.value">
+                                        [innerHTML]="message.data.text">
                                     </div>
                                 </div>
                                 <!-- Time -->
                                 <ng-container
                                     *ngIf="first
                                        || last
-                                       || chat.messages[i + 1].isMine !== message.isMine
-                                       || chat.messages[i + 1].createdAt !== message.createdAt">
+                                       || message.system.userId !== user">
                                     <div
                                         class="my-0.5 text-sm font-medium text-secondary"
-                                        [ngClass]="{'mr-3': message.isMine,
-                                                'ml-3': !message.isMine}">
-                                        {{message.createdAt | date:'HH:mm'}}
+                                        [ngClass]="{'mr-3': message.system.userId,
+                                                'ml-3': !message.system.userId}">
+                                        {{message.system.createdAt | date:'HH:mm'}}
                                     </div>
                                 </ng-container>
                             </div>

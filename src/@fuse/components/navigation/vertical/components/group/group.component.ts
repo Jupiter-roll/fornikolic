@@ -49,12 +49,14 @@ export class FuseVerticalNavigationGroupItemComponent implements OnInit, OnDestr
         // Get the parent navigation component
         this._fuseVerticalNavigationComponent = this._fuseNavigationService.getComponent(this.name);
 
-        this._fuseVerticalNavigationComponent.onRefreshed.pipe(
-            takeUntil(this._unsubscribeAll)
-        ).subscribe(() => {
+        setTimeout(() => {
+            this._fuseVerticalNavigationComponent.onRefreshed.pipe(
+                takeUntil(this._unsubscribeAll)
+            ).subscribe(() => {
 
-            this._changeDetectorRef.markForCheck();
-        });
+                this._changeDetectorRef.markForCheck();
+            });
+        }, 500)
     }
 
     /**
@@ -81,6 +83,14 @@ export class FuseVerticalNavigationGroupItemComponent implements OnInit, OnDestr
     };
 
     sideClick = (id) => {
-        this.store.dispatch(new ChangeChannel({id: id}))
+        this.store.dispatch(new ChangeChannel({id: id}));
+
+        // const navigation = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
+        //
+        // if ( navigation )
+        // {
+        //     // Toggle the opened status
+        //     navigation.toggle();
+        // }
     }
 }
