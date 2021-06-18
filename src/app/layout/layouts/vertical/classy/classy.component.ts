@@ -9,8 +9,8 @@ import {NewChannelComponent} from "../../../../modules/admin/apps/channel/new-ch
 import {MatDialog} from "@angular/material/dialog";
 import {ChannelState} from "../../../../store/channel/channel.state";
 import {Select, Store} from "@ngxs/store";
-import {FetchPageChannel} from "../../../../store/channel/channel.actions";
-
+import {AddNewChannel, FetchPageChannel} from "../../../../store/channel/channel.actions";
+import { v4 as uuidv4 } from 'uuid';
 @Component({
     selector     : 'classy-layout',
     templateUrl  : './classy.component.html',
@@ -120,11 +120,38 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
     }
 
     openNewChannel(): void {
-        const dialogRef = this._matDialog.open(NewChannelComponent);
-        dialogRef.afterClosed().subscribe(() => {
-            console.log('new channel close')
+        const dialogRef = this._matDialog.open(NewChannelComponent, {
+            panelClass: 'mail-compose-dialog',
+            disableClose: true,
+        });
+        dialogRef.afterClosed().subscribe((response) => {
+            if (!response) {
+                return;
+            }
+            const actionType: string = response[0];
+            const formData: FormData = response[1];
+            switch (actionType) {
+                case 'send':
+                    this.saveChannel(formData);
+                    break;
+            }
         })
     };
+
+    saveChannel = (event) => {
+        let value = event.value;
+        let newChannel = {
+            id: uuidv4(),
+            name: value.title,
+            description : value.description ? value.description : null,
+            type: value.type,
+            subscribe: value.subscribe,
+            space: value.space,
+            visibility: value.visibility
+        };
+        this.store.dispatch(new AddNewChannel(newChannel));
+
+    }
 
     moreChannel = (pNum) => {
         if (pNum === this.totalNum) {

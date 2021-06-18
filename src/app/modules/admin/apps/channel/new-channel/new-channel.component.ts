@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, Inject, OnInit, ViewEncapsulation} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {Observable} from "rxjs";
 import {BrowseChannelModel} from "../../../../../store/browseChannel/browse.channel.model";
@@ -38,6 +38,7 @@ export class NewChannelComponent implements OnInit {
         private _changeDetectorRef: ChangeDetectorRef,
         private store: Store,
     ) {
+        this.composeForm = this.createNewChannel();
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -49,14 +50,6 @@ export class NewChannelComponent implements OnInit {
      */
     ngOnInit(): void {
         // Create the form
-        this.composeForm = this._formBuilder.group({
-            title: ['', [Validators.required]],
-            description: ['', [Validators.required]],
-            type: ['', [Validators.required]],
-            subscribe: ['', [Validators.required]],
-            space: ['', [Validators.required]],
-            visibility: ['', [Validators.required]]
-        });
 
         this.browseChannelPage.subscribe(res => {
             this.pageNum = res;
@@ -125,6 +118,17 @@ export class NewChannelComponent implements OnInit {
             this.store.dispatch(new FetchPageBrowsChannel(pageNum))
         }
     };
+
+    createNewChannel(): FormGroup {
+        return new FormGroup({
+            title: new FormControl(''),
+            description: new FormControl(''),
+            type: new FormControl(''),
+            subscribe: new FormControl(''),
+            space: new FormControl(''),
+            visibility: new FormControl('')
+        })
+    }
 }
 
 export interface PeriodicElement {
