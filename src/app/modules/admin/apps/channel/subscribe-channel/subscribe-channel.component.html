@@ -1,0 +1,47 @@
+<div class="flex flex-col max-w-240 md:min-w-160 -m-6">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg">{{channelData['data']['name']}}</div>
+        <button
+            mat-icon-button
+            (click)="saveAndClose()"
+            [tabIndex]="-1">
+            <mat-icon
+                class="text-current"
+                [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button>
+    </div>
+
+    <!-- Compose form -->
+    <form
+        class="flex-col flex-auto p-6 sm:p-8 overflow-y-auto"
+       >
+        <!-- Actions -->
+        <div class="flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+            <div class="-ml-2">
+                <div class="mb-3" >
+                    <div>
+                        <h2 class="text-2xl mb-3">Description :</h2>
+                        <p>{{channelData['data']['description']}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pb-6 text-center">
+                <mat-icon class="text-3xl" style="font-size: 60px!important;">check_circle_outline</mat-icon>
+            </div>
+
+            <div class="flex items-center mt-4 sm:mt-0 text-right float-right" style="float: right!important;">
+
+                <button
+                    class="order-first sm:order-last"
+                    mat-flat-button
+                    [color]="'primary'"
+                    (click)="matDialogRef.close(['conform',subscribeForm])">
+                    Subscribe
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

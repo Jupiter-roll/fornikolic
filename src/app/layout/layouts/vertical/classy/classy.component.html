@@ -48,6 +48,20 @@
     <!-- Navigation footer hook -->
     <ng-container fuseVerticalNavigationContentFooter>
 
+        <div class="fuse-vertical-navigation-item-wrapper mb-5">
+            <div class="fuse-vertical-navigation-item flex m-3 cursor-pointer"
+                 (click)="moreChannel(pageNum)"
+            >
+                <mat-icon
+                    class="ml-3 mr-3"
+                    [svgIcon]="'heroicons_solid:chevron-down'"
+                >
+                </mat-icon>
+                <div class="fuse-vertical-navigation-item-title-wrapper">
+                    More
+                </div>
+            </div>
+        </div>
         <div class="fuse-vertical-navigation-item-wrapper">
             <div class="fuse-vertical-navigation-item flex m-3 cursor-pointer"
                  (click)="openNewChannel()"

@@ -19,34 +19,44 @@ import {MatDividerModule} from "@angular/material/divider";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatButtonModule} from "@angular/material/button";
+import {MatTabsModule} from "@angular/material/tabs";
+import {MatTableModule} from "@angular/material/table";
+import {BrowserAnimationsModule, NoopAnimationsModule} from "@angular/platform-browser/animations";
+import { SubscribeChannelComponent } from './subscribe-channel/subscribe-channel.component';
+import {MatRadioModule} from "@angular/material/radio";
 
 
 
 @NgModule({
   declarations: [
       ChannelComponent,
-      NewChannelComponent
+      NewChannelComponent,
+      SubscribeChannelComponent
   ],
-  imports: [
-    CommonModule,
-
-      MatButtonModule,
-      MatCheckboxModule,
-      MatDialogModule,
-      MatDividerModule,
-      MatFormFieldModule,
-      MatIconModule,
-      MatInputModule,
-      MatMenuModule,
-      MatProgressBarModule,
-      MatSelectModule,
-      MatSidenavModule,
-      QuillModule.forRoot(),
-      FuseFindByKeyPipeModule,
-      FuseNavigationModule,
-      FuseScrollbarModule,
-      FuseScrollResetModule,
-      SharedModule
-  ]
+    imports: [
+        CommonModule,
+        BrowserAnimationsModule,
+        NoopAnimationsModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatDialogModule,
+        MatDividerModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatMenuModule,
+        MatProgressBarModule,
+        MatSelectModule,
+        MatSidenavModule,
+        QuillModule.forRoot(),
+        FuseFindByKeyPipeModule,
+        FuseNavigationModule,
+        FuseScrollbarModule,
+        FuseScrollResetModule,
+        SharedModule,
+        MatTabsModule,
+        MatTableModule,
+        MatRadioModule
+    ]
 })
 export class ChannelModule { }

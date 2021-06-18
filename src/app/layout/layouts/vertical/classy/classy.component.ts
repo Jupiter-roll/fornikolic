@@ -1,12 +1,15 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import { ActivatedRoute, Data, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { InitialData } from 'app/app.types';
 import {NewChannelComponent} from "../../../../modules/admin/apps/channel/new-channel/new-channel.component";
 import {MatDialog} from "@angular/material/dialog";
+import {ChannelState} from "../../../../store/channel/channel.state";
+import {Select, Store} from "@ngxs/store";
+import {FetchPageChannel} from "../../../../store/channel/channel.actions";
 
 @Component({
     selector     : 'classy-layout',
@@ -18,7 +21,10 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
     data: InitialData;
     isScreenSmall: boolean;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-
+    @Select(ChannelState.getChannelPage) channelPage: Observable<number>;
+    @Select(ChannelState.getChannelTotalPage) channelTotalPage: Observable<number>;
+    pageNum: number;
+    totalNum: number;
     /**
      * Constructor
      */
@@ -28,6 +34,8 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _fuseNavigationService: FuseNavigationService,
         private _matDialog: MatDialog,
+        private _changeDetectorRef: ChangeDetectorRef,
+        private store: Store,
     )
     {
     }
@@ -65,6 +73,18 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
 
                 // Check if the screen is small
                 this.isScreenSmall = !matchingAliases.includes('md');
+            });
+
+        this.channelPage
+            .subscribe(res => {
+                this.pageNum = res;
+                this._changeDetectorRef.detectChanges();
+            });
+
+        this.channelTotalPage
+            .subscribe(res => {
+                this.totalNum = res;
+                this._changeDetectorRef.detectChanges();
             });
     }
 
@@ -104,5 +124,14 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
         dialogRef.afterClosed().subscribe(() => {
             console.log('new channel close')
         })
+    };
+
+    moreChannel = (pNum) => {
+        if (pNum === this.totalNum) {
+            return;
+        } else {
+            let pageNum = ++this.pageNum;
+            this.store.dispatch(new FetchPageChannel(pageNum))
+        }
     }
 }

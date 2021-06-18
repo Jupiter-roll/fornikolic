@@ -143,7 +143,6 @@ export class ConversationComponent implements OnInit, OnDestroy {
                 }
                 this.myMessageNum = data.length - 1;
                 this._changeDetectorRef.detectChanges();
-                console.log(this.selectedChat, '=>>>>>>>>>.')
             });
     }
 

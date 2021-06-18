@@ -1,34 +1,42 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectorRef, Component, Inject, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {Observable} from "rxjs";
+import {BrowseChannelModel} from "../../../../../store/browseChannel/browse.channel.model";
+import {BrowseChannelState} from "../../../../../store/browseChannel/browse.channel.state";
+import {Select, Store} from "@ngxs/store";
+import {FetchPageBrowsChannel, SubscribeChannel} from "../../../../../store/browseChannel/browse.channel.actions";
+import {fuseAnimations} from "../../../../../../@fuse/animations";
+import {SubscribeChannelComponent} from "../subscribe-channel/subscribe-channel.component";
 
 @Component({
     selector: 'app-new-channel',
     templateUrl: './new-channel.component.html',
     styleUrls: ['./new-channel.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    animations   : fuseAnimations
 })
 export class NewChannelComponent implements OnInit {
-    yearlyBilling: boolean = true;
+    @Select(BrowseChannelState.getBrowseChannelList) browseChannel: Observable<BrowseChannelModel>;
+    @Select(BrowseChannelState.getBrowseChannelPage) browseChannelPage: Observable<number>;
+    @Select(BrowseChannelState.getBrowseChannelTotalPage) browseChannelTotalPage: Observable<number>;
+    pageNum: number;
+    totalNum: number;
+    dialogRef: any;
+    dataSource: PeriodicElement[] = [];
+    displayedColumns: string[] = ['id', 'name', 'type', 'users', 'subtitle'];
     composeForm: FormGroup;
-    copyFields: { cc: boolean; bcc: boolean } = {
-        cc: false,
-        bcc: false
-    };
-    quillModules: any = {
-        toolbar: [
-            ['bold', 'italic', 'underline'],
-            [{align: []}, {list: 'ordered'}, {list: 'bullet'}],
-            ['clean']
-        ]
-    };
 
     /**
      * Constructor
      */
     constructor(
         public matDialogRef: MatDialogRef<NewChannelComponent>,
-        private _formBuilder: FormBuilder
+        public _matDialog: MatDialog,
+        @Inject(MAT_DIALOG_DATA) private _data: any,
+        private _formBuilder: FormBuilder,
+        private _changeDetectorRef: ChangeDetectorRef,
+        private store: Store,
     ) {
     }
 
@@ -42,62 +50,87 @@ export class NewChannelComponent implements OnInit {
     ngOnInit(): void {
         // Create the form
         this.composeForm = this._formBuilder.group({
-            to: ['', [Validators.required, Validators.email]],
-            cc: ['', [Validators.email]],
-            bcc: ['', [Validators.email]],
-            subject: [''],
-            body: ['', [Validators.required]]
+            title: ['', [Validators.required]],
+            description: ['', [Validators.required]],
+            type: ['', [Validators.required]],
+            subscribe: ['', [Validators.required]],
+            space: ['', [Validators.required]],
+            visibility: ['', [Validators.required]]
         });
-    }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
+        this.browseChannelPage.subscribe(res => {
+            this.pageNum = res;
+            this._changeDetectorRef.detectChanges();
+        });
+        this.browseChannelTotalPage.subscribe(res => {
+                this.totalNum = res
+            });
 
-    /**
-     * Show the copy field with the given field name
-     *
-     * @param name
-     */
-    showCopyField(name: string): void {
-        // Return if the name is not one of the available names
-        if (name !== 'cc' && name !== 'bcc') {
-            return;
-        }
-
-        // Show the field
-        this.copyFields[name] = true;
+        this.browseChannel
+            .subscribe((res: any) => {
+                this.dataSource = res;
+            })
     }
 
     /**
      * Save and close
      */
     saveAndClose(): void {
-        // Save the message as a draft
-        this.saveAsDraft();
-
-        // Close the dialog
         this.matDialogRef.close();
     }
 
-    /**
-     * Discard the message
-     */
-    discard(): void {
-
+    resetForm = () => {
+        this.composeForm.reset()
     }
 
-    /**
-     * Save the message as a draft
-     */
-    saveAsDraft(): void {
+    subscribeToChannel = (channel) => {
+        if (channel['user']['isSubscribed']) {
+            return;
+        }
+        else {
+            this.dialogRef = this._matDialog.open(SubscribeChannelComponent, {
+                panelClass: 'sub-compose-dialog',
+                data: {
+                    channel: channel
+                }
+            });
+            this.dialogRef.afterClosed()
+                .subscribe(response => {
+                    if (!response) {
+                        return;
+                    }
+                    this.isSubscribed(channel);
+                })
+        }
+    };
 
-    }
+    isSubscribed = (channel) => {
+        this.store.dispatch(new SubscribeChannel(channel))
+    };
 
-    /**
-     * Send the message
-     */
-    send(): void {
+    prePage = (pNum) => {
+        if (pNum === 1) {
+            return;
+        } else {
+            let pageNum = --this.pageNum;
+            this.store.dispatch(new FetchPageBrowsChannel(pageNum))
+        }
+    };
 
-    }
+    nextPage = (pNum) => {
+        if (pNum === this.totalNum) {
+            return;
+        } else {
+            let pageNum = ++this.pageNum;
+            this.store.dispatch(new FetchPageBrowsChannel(pageNum))
+        }
+    };
+}
+
+export interface PeriodicElement {
+    id: string;
+    name: string;
+    type: string;
+    users: string;
+    subtitle: string;
 }

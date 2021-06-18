@@ -28,7 +28,8 @@
 
             <!-- Chats list -->
             <ng-container *ngIf="getTopics && getTopics.length > 0; else noTopic">
-                <div class="relative flex flex-auto flex-col w-full min-w-0 lg:min-w-100 lg:max-w-100 bg-card dark:bg-transparent">
+                <div
+                    class="relative flex flex-auto flex-col w-full min-w-0 lg:min-w-100 lg:max-w-100 bg-card dark:bg-transparent">
 
                     <!-- Header -->
                     <div class="flex flex-col flex-0 py-4 px-8 border-b bg-gray-50 dark:bg-transparent">
@@ -70,12 +71,12 @@
                                     class="z-20 flex items-center py-5 px-8 cursor-pointer border-b"
                                     [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedChat || selectedChat.id !== topic.id,
                                                 'bg-primary-50 dark:bg-hover': selectedChat && selectedChat.id === topic.id}"
-                                    [routerLink]="[topic.id]"
-                                    (click)="getChat(topic)"
-                                    >
+                                    (click)="getChat(topic)">
+<!--                                    [routerLink]="[topic.id]"-->
                                     <div class="relative flex flex-0 items-center justify-center w-10 h-10">
                                         <ng-container>
-                                            <div class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                                            <div
+                                                class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
                                                 {{topic.data.name.charAt(0)}}
                                             </div>
                                         </ng-container>
@@ -90,7 +91,8 @@
                                         </div>
                                     </div>
                                     <div class="flex flex-col items-end self-start ml-auto pl-2">
-                                        <div class="text-sm leading-5 text-secondary">{{topic.system.updatedAt.split('T')[0]}}</div>
+                                        <div
+                                            class="text-sm leading-5 text-secondary">{{topic.system.updatedAt.split('T')[0]}}</div>
                                         <ng-container *ngIf="topic.data.system?.model">
                                             <mat-icon
                                                 class="icon-size-5 text-hint"
