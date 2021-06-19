@@ -14,28 +14,28 @@
 
 <mat-menu
     [xPosition]="'before'"
-    #userActions="matMenu">
-    <button mat-menu-item *ngIf="adminStatus" (click)="editChannel(selectChannel)">
+    #userActions="matMenu" >
+    <button mat-menu-item *ngIf="adminStatus" (click)="editChannel(selectChannel)" >
         <mat-icon [svgIcon]="'heroicons_outline:user-circle'"></mat-icon>
-        <span>Edit Channel</span>
+        <span *transloco="let t">{{t('channel-edit')}}</span>
     </button>
     <button mat-menu-item *ngIf="!adminStatus">
         <mat-icon [svgIcon]="'heroicons_outline:user-circle'" disabled></mat-icon>
-        <span>Edit Channel</span>
+        <span *transloco="let t">{{t('channel-edit')}}</span>
     </button>
     <button mat-menu-item (click)="channelSetting(selectChannel.id)">
         <mat-icon [svgIcon]="'heroicons_outline:cog'"></mat-icon>
-        <span>Settings</span>
+        <span *transloco="let t">{{t('other-settings')}}</span>
     </button>
     <button mat-menu-item (click)="channelStatus()">
         <mat-icon [svgIcon]="'heroicons_outline:dots-circle-horizontal'"></mat-icon>
-        <span>Status</span>
+        <span *transloco="let t">{{t('other-status')}}</span>
     </button>
     <mat-divider class="my-2"></mat-divider>
     <button
         mat-menu-item
         (click)="signOut()">
         <mat-icon [svgIcon]="'heroicons_outline:logout'"></mat-icon>
-        <span>Leave Channel</span>
+        <span *transloco="let t">{{t('channel-leave')}}</span>
     </button>
 </mat-menu>

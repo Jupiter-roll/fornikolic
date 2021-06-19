@@ -16,6 +16,7 @@ import { ContactInfoComponent } from 'app/modules/admin/apps/chat/contact-info/c
 import { ConversationComponent } from 'app/modules/admin/apps/chat/conversation/conversation.component';
 import { NewChatComponent } from 'app/modules/admin/apps/chat/new-chat/new-chat.component';
 import { ProfileComponent } from 'app/modules/admin/apps/chat/profile/profile.component';
+import {TranslocoModule} from "@ngneat/transloco";
 
 @NgModule({
     declarations: [
@@ -26,7 +27,7 @@ import { ProfileComponent } from 'app/modules/admin/apps/chat/profile/profile.co
         NewChatComponent,
         ProfileComponent
     ],
-    imports     : [
+    imports: [
         RouterModule.forChild(chatRoutes),
         MatButtonModule,
         MatCheckboxModule,
@@ -36,7 +37,8 @@ import { ProfileComponent } from 'app/modules/admin/apps/chat/profile/profile.co
         MatMenuModule,
         MatSidenavModule,
         FuseAutogrowModule,
-        SharedModule
+        SharedModule,
+        TranslocoModule
     ]
 })
 export class ChatModule

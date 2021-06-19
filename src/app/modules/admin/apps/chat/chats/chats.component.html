@@ -1,4 +1,4 @@
-<div class="relative flex flex-auto w-full bg-card dark:bg-transparent">
+<div class="relative flex flex-auto w-full bg-card dark:bg-transparent" *transloco="let t">
 
     <mat-drawer-container
         class="flex-auto h-full"
@@ -35,7 +35,7 @@
                     <div class="flex flex-col flex-0 py-4 px-8 border-b bg-gray-50 dark:bg-transparent">
                         <div class="flex items-center">
                             <div class="flex items-center mr-1 cursor-pointer">
-                                <div class="ml-4 font-medium truncate text-2xl">Topic</div>
+                                <div class="ml-4 font-medium truncate text-2xl">{{t('topic-title')}}</div>
                             </div>
                             <button
                                 class="ml-auto"
@@ -107,13 +107,13 @@
                                     </div>
                                     <mat-menu #topicMenu="matMenu">
                                         <button mat-menu-item  (click)="editTopic(topic)">
-                                            Edit Topic
+                                            {{t('topic-edit')}}
                                         </button>
                                         <button mat-menu-item (click)="settingTopic(topic)">
-                                            Topic Settings
+                                            {{t('topic-setting')}}
                                         </button>
                                         <button mat-menu-item (click)="topicState()">
-                                            Topic Status
+                                            {{t('topic-status')}}
                                         </button>
                                     </mat-menu>
                                 </div>

@@ -23,6 +23,7 @@ import {SharedModule} from "../../../../shared/shared.module";
 import { EditTopicComponent } from './edit-topic/edit-topic.component';
 import { TopicSettingComponent } from './topic-setting/topic-setting.component';
 import { TopicStatusComponent } from './topic-status/topic-status.component';
+import {TranslocoModule} from "@ngneat/transloco";
 
 
 
@@ -54,7 +55,8 @@ import { TopicStatusComponent } from './topic-status/topic-status.component';
         FuseNavigationModule,
         FuseScrollbarModule,
         FuseScrollResetModule,
-        SharedModule
+        SharedModule,
+        TranslocoModule
     ]
 })
 export class TopicModule { }

@@ -35,11 +35,8 @@
             </div>
 
             <div class="flex flex-col items-center justify-center w-full mt-6">
-                <div class="w-full whitespace-nowrap overflow-ellipsis overflow-hidden text-center leading-normal font-medium">
-                    {{data.user.name}}
-                </div>
-                <div class="w-full mt-0.5 whitespace-nowrap overflow-ellipsis overflow-hidden text-center text-md leading-normal font-medium text-secondary">
-                    {{data.user.email}}
+                <div class="w-full mt-0.5 whitespace-nowrap overflow-ellipsis overflow-hidden text-center text-md leading-normal font-medium text-secondary" *transloco="let t">
+                    {{t('title')}}
                 </div>
             </div>
         </div>
@@ -56,8 +53,8 @@
                     [svgIcon]="'heroicons_solid:chevron-down'"
                 >
                 </mat-icon>
-                <div class="fuse-vertical-navigation-item-title-wrapper">
-                    More
+                <div class="fuse-vertical-navigation-item-title-wrapper"  *transloco="let t">
+                    {{t('other-more')}}
                 </div>
             </div>
         </div>
@@ -70,8 +67,8 @@
                     [svgIcon]="'heroicons_solid:plus-circle'"
                 >
                 </mat-icon>
-                <div class="fuse-vertical-navigation-item-title-wrapper">
-                    Add new channels
+                <div class="fuse-vertical-navigation-item-title-wrapper" *transloco="let t">
+                    {{t('channel-add')}}
                 </div>
             </div>
         </div>

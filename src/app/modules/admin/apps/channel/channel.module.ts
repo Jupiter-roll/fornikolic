@@ -27,6 +27,7 @@ import {MatRadioModule} from "@angular/material/radio";
 import { EditChannelComponent } from './edit-channel/edit-channel.component';
 import { ChannelSettingComponent } from './channel-setting/channel-setting.component';
 import { ChannelStatusComponent } from './channel-status/channel-status.component';
+import {TranslocoModule} from "@ngneat/transloco";
 
 
 
@@ -62,7 +63,8 @@ import { ChannelStatusComponent } from './channel-status/channel-status.componen
         SharedModule,
         MatTabsModule,
         MatTableModule,
-        MatRadioModule
+        MatRadioModule,
+        TranslocoModule
     ]
 })
 export class ChannelModule { }

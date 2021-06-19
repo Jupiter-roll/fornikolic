@@ -15,12 +15,13 @@ import { ShortcutsModule } from 'app/layout/common/shortcuts/shortcuts.module';
 import { UserMenuModule } from 'app/layout/common/user-menu/user-menu.module';
 import { SharedModule } from 'app/shared/shared.module';
 import { ClassyLayoutComponent } from 'app/layout/layouts/vertical/classy/classy.component';
+import {TranslocoModule} from "@ngneat/transloco";
 
 @NgModule({
     declarations: [
         ClassyLayoutComponent
     ],
-    imports     : [
+    imports: [
         HttpClientModule,
         RouterModule,
         MatButtonModule,
@@ -35,7 +36,8 @@ import { ClassyLayoutComponent } from 'app/layout/layouts/vertical/classy/classy
         SearchModule,
         ShortcutsModule,
         UserMenuModule,
-        SharedModule
+        SharedModule,
+        TranslocoModule
     ],
     exports     : [
         ClassyLayoutComponent

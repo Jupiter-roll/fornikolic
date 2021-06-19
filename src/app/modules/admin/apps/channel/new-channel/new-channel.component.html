@@ -2,7 +2,7 @@
 
     <!-- Header -->
     <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
-        <div class="text-lg">Create Channel</div>
+        <div class="text-lg" *transloco="let t">{{t('channel-create')}}</div>
         <button
             mat-icon-button
             (click)="saveAndClose()"
@@ -18,7 +18,7 @@
             <!-- Tabs -->
             <mat-tab-group
                 class="sm:px-2"
-                [animationDuration]="'0'">
+                [animationDuration]="'0'" *transloco="let t">
 
                 <!-- Home -->
                 <mat-tab label="Add Channel">
@@ -29,7 +29,7 @@
 
                             <!-- To -->
                             <mat-form-field>
-                                <mat-label>Title</mat-label>
+                                <mat-label>{{t('other-title')}}</mat-label>
                                 <input
                                     matInput
                                     [formControlName]="'title'">
@@ -37,7 +37,7 @@
 
                             <!-- Subject -->
                             <mat-form-field>
-                                <mat-label>Description</mat-label>
+                                <mat-label>{{t('other-description')}}</mat-label>
                                 <textarea
                                     [formControlName]="'description'"
                                     class="text-primary"
@@ -47,7 +47,7 @@
 
                             <div class="grid grid-cols-4 gap-6 w-full mt-8">
                                 <div class="col-span-2">
-                                    <span class="font-semibold mb-2">Type</span>
+                                    <span class="font-semibold mb-2">{{t('other-type')}}</span>
                                     <mat-radio-group
                                         class="flex flex-col"
                                         [color]="'primary'"
@@ -66,7 +66,7 @@
                                 </div>
 
                                 <div class="col-span-2">
-                                    <span class="font-semibold mb-4">Subscribe</span>
+                                    <span class="font-semibold mb-4">{{t('other-subscribe')}}</span>
                                     <mat-radio-group
                                         class="flex flex-col"
                                         [color]="'primary'"
@@ -88,7 +88,7 @@
                                 </div>
 
                                 <div class="col-span-2">
-                                    <span class="font-semibold mb-2">Space</span>
+                                    <span class="font-semibold mb-2">{{t('other-space')}}</span>
                                     <mat-radio-group
                                         class="flex flex-col"
                                         [color]="'primary'"
@@ -107,7 +107,7 @@
                                 </div>
 
                                 <div class="col-span-2">
-                                    <span class="font-semibold mb-4">Visibility</span>
+                                    <span class="font-semibold mb-4">{{t('other-visibility')}}</span>
                                     <mat-radio-group
                                         class="flex flex-col"
                                         [color]="'primary'"
