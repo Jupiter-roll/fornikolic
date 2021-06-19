@@ -25,6 +25,8 @@ import {BrowserAnimationsModule, NoopAnimationsModule} from "@angular/platform-b
 import { SubscribeChannelComponent } from './subscribe-channel/subscribe-channel.component';
 import {MatRadioModule} from "@angular/material/radio";
 import { EditChannelComponent } from './edit-channel/edit-channel.component';
+import { ChannelSettingComponent } from './channel-setting/channel-setting.component';
+import { ChannelStatusComponent } from './channel-status/channel-status.component';
 
 
 
@@ -33,7 +35,9 @@ import { EditChannelComponent } from './edit-channel/edit-channel.component';
       ChannelComponent,
       NewChannelComponent,
       SubscribeChannelComponent,
-      EditChannelComponent
+      EditChannelComponent,
+      ChannelSettingComponent,
+      ChannelStatusComponent
   ],
     imports: [
         CommonModule,

@@ -23,12 +23,11 @@
         <mat-icon [svgIcon]="'heroicons_outline:user-circle'" disabled></mat-icon>
         <span>Edit Channel</span>
     </button>
-    <button mat-menu-item>
+    <button mat-menu-item (click)="channelSetting(selectChannel.id)">
         <mat-icon [svgIcon]="'heroicons_outline:cog'"></mat-icon>
         <span>Settings</span>
     </button>
-    <button
-        mat-menu-item>
+    <button mat-menu-item (click)="channelStatus()">
         <mat-icon [svgIcon]="'heroicons_outline:dots-circle-horizontal'"></mat-icon>
         <span>Status</span>
     </button>

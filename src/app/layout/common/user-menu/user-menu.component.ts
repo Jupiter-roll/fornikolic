@@ -9,7 +9,9 @@ import {EditChannelComponent} from "../../../modules/admin/apps/channel/edit-cha
 import {MatDialog} from "@angular/material/dialog";
 import {Store} from "@ngxs/store";
 import {FormGroup} from "@angular/forms";
-import {UpdateChannel} from "../../../store/channel/channel.actions";
+import {SetChannelStatus, SetNotification, UpdateChannel} from "../../../store/channel/channel.actions";
+import {ChannelSettingComponent} from "../../../modules/admin/apps/channel/channel-setting/channel-setting.component";
+import {ChannelStatusComponent} from "../../../modules/admin/apps/channel/channel-status/channel-status.component";
 
 @Component({
     selector       : 'user-menu',
@@ -30,6 +32,7 @@ export class UserMenuComponent implements OnInit, OnDestroy
     user: User;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     dialogRef: any;
+    _isStatus: Boolean = false;
 
     /**
      * Constructor
@@ -59,7 +62,6 @@ export class UserMenuComponent implements OnInit, OnDestroy
             .subscribe((user: User) => {
                 this.user = user;
 
-                // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
     }
@@ -72,30 +74,6 @@ export class UserMenuComponent implements OnInit, OnDestroy
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
-    }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Update the user status
-     *
-     * @param status
-     */
-    updateUserStatus(status: string): void
-    {
-        // Return if user is not available
-        if ( !this.user )
-        {
-            return;
-        }
-
-        // Update the user
-        this._userService.update({
-            ...this.user,
-            status
-        }).subscribe();
     }
 
     /**
@@ -133,5 +111,60 @@ export class UserMenuComponent implements OnInit, OnDestroy
             description: value.description
         };
         this.store.dispatch(new UpdateChannel(channel))
+    };
+
+    channelSetting = (id) => {
+        this.dialogRef = this._matDialog.open(ChannelSettingComponent, {
+            panelClass: 'mail-compose-dialog',
+            disableClose: true,
+            data: {channelId: id}
+        });
+        this.dialogRef.afterClosed().subscribe(response => {
+            if (!response) {
+                return;
+            }
+            const actionType: string = response[0];
+            const formData: FormGroup = response[1];
+            switch (actionType) {
+                case 'save':
+                    this.saveSetting(formData.getRawValue());
+                    break;
+            }
+        })
+    };
+
+    saveSetting = (value) => {
+        let notification = {
+            notify: value.isCheck,
+            channelId: this.selectChannel.id
+        };
+        this.store.dispatch(new SetNotification(notification))
+    };
+
+    channelStatus = () => {
+        this.dialogRef = this._matDialog.open(ChannelStatusComponent,  {
+            panelClass: 'mail-compose-dialog',
+            disableClose: true,
+        });
+        this.dialogRef.afterClosed()
+            .subscribe(response => {
+                if (!response) {
+                    return;
+                }
+                const actionType: string = response[0];
+                switch (actionType) {
+                    case 'status' :
+                        this.saveStatus();
+                        break;
+                }
+            })
+    };
+
+    saveStatus = () => {
+        let status = {
+            channelId: this.selectChannel.id,
+            active: this._isStatus
+        };
+        this.store.dispatch(new SetChannelStatus(status))
     }
 }
