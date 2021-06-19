@@ -20,13 +20,19 @@ import {FuseNavigationModule} from "../../../../../@fuse/components/navigation";
 import {FuseScrollbarModule} from "../../../../../@fuse/directives/scrollbar";
 import {FuseScrollResetModule} from "../../../../../@fuse/directives/scroll-reset";
 import {SharedModule} from "../../../../shared/shared.module";
+import { EditTopicComponent } from './edit-topic/edit-topic.component';
+import { TopicSettingComponent } from './topic-setting/topic-setting.component';
+import { TopicStatusComponent } from './topic-status/topic-status.component';
 
 
 
 @NgModule({
   declarations: [
       TopicComponent,
-      NewTopicComponent
+      NewTopicComponent,
+      EditTopicComponent,
+      TopicSettingComponent,
+      TopicStatusComponent
   ],
     imports: [
         CommonModule,

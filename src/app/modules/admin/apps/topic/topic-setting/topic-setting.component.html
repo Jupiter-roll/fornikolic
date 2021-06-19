@@ -1,0 +1,52 @@
+<div class="flex flex-col max-w-240 md:min-w-160 -m-6">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg">Topic Setting</div>
+        <button
+            mat-icon-button
+            (click)="saveAndClose()"
+            [tabIndex]="-1">
+            <mat-icon
+                class="text-current"
+                [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button>
+    </div>
+    <form
+        class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto"
+        [formGroup]="settingForm">
+        <div  *ngIf="_isSetting">
+            <mat-checkbox
+                name="isCheck"
+                [ngModel]="true"
+                formControlName="isCheck">
+                Topic Notification turn on/off
+            </mat-checkbox>
+        </div>
+        <div  *ngIf="!_isSetting">
+            <mat-checkbox
+                name="isCheck"
+                [ngModel]="false"
+                formControlName="isCheck">
+                Topic Notification turn on/off
+            </mat-checkbox>
+        </div>
+        <div class="flex items-center justify-between mt-5">
+            <button
+                mat-stroked-button
+                (click)="channelOff()"
+                type="button">
+                Cancel
+            </button>
+            <button
+                class="ml-4"
+                mat-flat-button
+                type="button"
+                (click)="matDialogRef.close(['save',settingForm])"
+                [disabled]="settingForm.invalid"
+                [color]="'primary'">Submit
+            </button>
+        </div>
+    </form>
+
+</div>

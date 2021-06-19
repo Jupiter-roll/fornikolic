@@ -40,7 +40,7 @@
                             <button
                                 class="ml-auto"
                                 mat-icon-button
-                                (click)="openNewTopic()">
+                                (click)="openNewTopic(null)">
                                 <mat-icon [svgIcon]="'heroicons_outline:plus-circle'"></mat-icon>
                             </button>
                         </div>
@@ -99,11 +99,23 @@
                                                 [svgIcon]="'heroicons_solid:volume-off'"></mat-icon>
                                         </ng-container>
                                     </div>
-                                    <div class="flex flex-col items-end self-start ml-auto pl-2">
+                                    <div class="flex flex-col items-end self-start ml-auto pl-2" >
                                         <mat-icon
                                             class="icon-size-5 text-hint"
+                                            [matMenuTriggerFor]="topicMenu"
                                             [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
                                     </div>
+                                    <mat-menu #topicMenu="matMenu">
+                                        <button mat-menu-item  (click)="editTopic(topic)">
+                                            Edit Topic
+                                        </button>
+                                        <button mat-menu-item (click)="settingTopic(topic)">
+                                            Topic Settings
+                                        </button>
+                                        <button mat-menu-item (click)="topicState()">
+                                            Topic Status
+                                        </button>
+                                    </mat-menu>
                                 </div>
                             </ng-container>
                         </ng-container>
