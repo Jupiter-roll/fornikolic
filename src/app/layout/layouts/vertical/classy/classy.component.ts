@@ -23,8 +23,13 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     @Select(ChannelState.getChannelPage) channelPage: Observable<number>;
     @Select(ChannelState.getChannelTotalPage) channelTotalPage: Observable<number>;
+    @Select(ChannelState.getSelectedChannel) selectedChannel: Observable<any>
     pageNum: number;
     totalNum: number;
+    channelSettingStatus: Boolean = false;
+    isAdmin: boolean = false;
+    selectChannel: any;
+
     /**
      * Constructor
      */
@@ -86,6 +91,15 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
                 this.totalNum = res;
                 this._changeDetectorRef.detectChanges();
             });
+
+        this.selectedChannel.subscribe(channelData => {
+            if (channelData) {
+                this.channelSettingStatus = true;
+                this.selectChannel = channelData;
+                this.isAdmin = channelData.system.userId === localStorage.getItem('userId');
+            }
+        });
+
     }
 
     /**

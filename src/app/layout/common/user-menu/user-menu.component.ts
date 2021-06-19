@@ -5,6 +5,11 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { User } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
+import {EditChannelComponent} from "../../../modules/admin/apps/channel/edit-channel/edit-channel.component";
+import {MatDialog} from "@angular/material/dialog";
+import {Store} from "@ngxs/store";
+import {FormGroup} from "@angular/forms";
+import {UpdateChannel} from "../../../store/channel/channel.actions";
 
 @Component({
     selector       : 'user-menu',
@@ -20,9 +25,11 @@ export class UserMenuComponent implements OnInit, OnDestroy
     /* eslint-enable @typescript-eslint/naming-convention */
 
     @Input() showAvatar: boolean = true;
+    @Input() selectChannel: any;
+    @Input() adminStatus = false;
     user: User;
-
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+    dialogRef: any;
 
     /**
      * Constructor
@@ -30,7 +37,9 @@ export class UserMenuComponent implements OnInit, OnDestroy
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
-        private _userService: UserService
+        private _userService: UserService,
+        public _matDialog: MatDialog,
+        private store: Store,
     )
     {
     }
@@ -95,5 +104,34 @@ export class UserMenuComponent implements OnInit, OnDestroy
     signOut(): void
     {
         this._router.navigate(['/sign-out']);
+    };
+
+    editChannel = (channel) => {
+        this.dialogRef = this._matDialog.open(EditChannelComponent, {
+            panelClass: 'mail-compose-dialog',
+            disableClose: true,
+            data: {channel: channel}
+        });
+        this.dialogRef.afterClosed().subscribe(response => {
+            if (!response) {
+                return;
+            }
+            const actionType: string = response[0];
+            const formData: FormGroup = response[1];
+            switch (actionType) {
+                case 'save':
+                    this.editCurrentChannel(formData.getRawValue());
+                    break;
+            }
+        })
+    };
+
+    editCurrentChannel = (value) => {
+        let channel = {
+            id: this.selectChannel.id,
+            name: value.title,
+            description: value.description
+        };
+        this.store.dispatch(new UpdateChannel(channel))
     }
 }

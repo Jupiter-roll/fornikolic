@@ -24,6 +24,7 @@ import {MatTableModule} from "@angular/material/table";
 import {BrowserAnimationsModule, NoopAnimationsModule} from "@angular/platform-browser/animations";
 import { SubscribeChannelComponent } from './subscribe-channel/subscribe-channel.component';
 import {MatRadioModule} from "@angular/material/radio";
+import { EditChannelComponent } from './edit-channel/edit-channel.component';
 
 
 
@@ -31,7 +32,8 @@ import {MatRadioModule} from "@angular/material/radio";
   declarations: [
       ChannelComponent,
       NewChannelComponent,
-      SubscribeChannelComponent
+      SubscribeChannelComponent,
+      EditChannelComponent
   ],
     imports: [
         CommonModule,

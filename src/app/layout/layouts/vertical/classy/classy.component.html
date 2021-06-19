@@ -15,9 +15,8 @@
                     src="assets/images/logo/logo.svg">
             </div>
             <!-- Components -->
-            <div class="flex items-center ml-auto">
-                <notifications [notifications]="data.notifications"></notifications>
-                <user-menu [showAvatar]="false"></user-menu>
+            <div class="flex items-center ml-auto" *ngIf="channelSettingStatus">
+                <user-menu [showAvatar]="false" [selectChannel]="selectChannel" [adminStatus]="isAdmin"></user-menu>
             </div>
         </div>
 
