@@ -227,7 +227,6 @@ export class ChatsComponent implements OnInit, OnDestroy
         let value = event.value;
         let topic = {
             id: this.selectedTopic.id,
-            channelId: this.channelId,
             name: value.title,
             description: value.description
         };
