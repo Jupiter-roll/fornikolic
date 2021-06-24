@@ -18,8 +18,11 @@ import {ChatService} from 'app/modules/admin/apps/chat/chat.service';
 import {MessageModel} from "../../../../../store/message/message.model";
 import {MessageState} from "../../../../../store/message/message.state";
 import {TopicState} from "../../../../../store/topic/topic.state";
-import {Select} from "@ngxs/store";
+import {Select, Store} from "@ngxs/store";
 import {TopicModel} from "../../../../../store/topic/topic.model";
+import {FormBuilder, FormGroup, NgForm} from "@angular/forms";
+import { v4 as uuidv4 } from 'uuid';
+import {AddMessage} from "../../../../../store/message/message.actions";
 
 @Component({
     selector: 'chat-conversation',
@@ -29,6 +32,7 @@ import {TopicModel} from "../../../../../store/topic/topic.model";
 })
 export class ConversationComponent implements OnInit, OnDestroy {
     @ViewChild('messageInput') messageInput: ElementRef;
+    @ViewChild('replyForm') replyForm: NgForm;
     chat: Chat;
     drawerMode: 'over' | 'side' = 'side';
     drawerOpened: boolean = false;
@@ -44,7 +48,10 @@ export class ConversationComponent implements OnInit, OnDestroy {
     compId: string;
     @Select(TopicState.getSelectedTopic) selectedTopic: Observable<TopicModel>;
     @Select(MessageState.getMessageList) getMessage: Observable<MessageModel>;
-
+    accept: 'application/x-zip-compressed,image/*';
+    fileSelected = false;
+    file: File | null = null;
+    imageURL: string;
     /**
      * Constructor
      */
@@ -52,7 +59,9 @@ export class ConversationComponent implements OnInit, OnDestroy {
         private _changeDetectorRef: ChangeDetectorRef,
         private _chatService: ChatService,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
-        private _ngZone: NgZone
+        private _ngZone: NgZone,
+        private store: Store,
+        private _formBuilder: FormBuilder,
     ) {
     }
 
@@ -207,4 +216,29 @@ export class ConversationComponent implements OnInit, OnDestroy {
     readyToReply = () => {
 
     }
+
+    reply(event): void {
+        console.log(this.replyForm)
+        event.preventDefault();
+        if (event.target.value === '') {
+            return;
+        }
+        let replyMessage = {
+            id: uuidv4(),
+            channelId: this.topic.data.channelId,
+            topicId: this.topic.id,
+            text: event.target.value,
+        };
+        this.store.dispatch(new AddMessage(replyMessage))
+        this.messageInput.nativeElement.value = ''
+    };
+
+    uploadFile(files: FileList | null): void {
+        if (files) {
+            this.fileSelected = true
+            this.file = files.item(0);
+            console.log(this.file, '=???????? selected file')
+        }
+    };
+
 }

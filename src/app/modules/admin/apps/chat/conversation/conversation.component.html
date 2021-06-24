@@ -36,10 +36,11 @@
                     <!-- Contact info -->
                     <div
                         class="flex items-center ml-2 lg:ml-0 mr-2 cursor-pointer"
-                       >
+                    >
                         <div class="relative flex flex-0 items-center justify-center w-10 h-10">
                             <ng-container>
-                                <div class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                                <div
+                                    class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
                                     {{topic?.data.name.charAt(0)}}
                                 </div>
                             </ng-container>
@@ -66,7 +67,7 @@
                             <button
                                 mat-menu-item
                                 (click)="toggleMuteNotifications()">
-                                <ng-container >
+                                <ng-container>
                                     <mat-icon [svgIcon]="'heroicons_outline:volume-off'"></mat-icon>
                                     Mute notifications
                                 </ng-container>
@@ -85,11 +86,15 @@
                 </div>
 
                 <!-- Conversation -->
+
                 <div class="flex overflow-y-auto flex-col-reverse">
-                    <div class="flex flex-col flex-auto flex-shrink p-6 bg-card dark:bg-transparent" style="height: 92vh!important;">
-                        <ng-container *ngFor="let message of selectedChat; let i = index; let first = first; let last = last; trackBy: trackByFn">
+                    <div class="flex flex-col flex-auto flex-shrink p-6 bg-card dark:bg-transparent"
+                         style="height: 92vh!important;">
+                        <ng-container
+                            *ngFor="let message of selectedChat; let i = index; let first = first; let last = last; trackBy: trackByFn">
                             <!-- Start of the day -->
-                            <ng-container *ngIf="first || (message.system.updatedAt | date:'d') !== (message.system.updatedAt | date:'d')">
+                            <ng-container
+                                *ngIf="first || (message.system.updatedAt | date:'d') !== (message.system.updatedAt | date:'d')">
                                 <div class="flex items-center justify-center my-3 -mx-6">
                                     <div class="flex-auto border-b"></div>
                                     <div class="flex-0 mx-4 text-sm font-medium leading-5 text-secondary">
@@ -143,32 +148,48 @@
 
                 <!-- Message field -->
                 <div class="flex items-end p-4 border-t bg-gray-50 dark:bg-transparent">
-                    <div class="flex items-center h-11 my-px">
-                        <button mat-icon-button>
-                            <mat-icon [svgIcon]="'heroicons_outline:emoji-happy'"></mat-icon>
-                        </button>
-                        <button
-                            class="ml-0.5"
-                            mat-icon-button>
-                            <mat-icon [svgIcon]="'heroicons_outline:paper-clip'"></mat-icon>
-                        </button>
-                    </div>
-                    <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded fuse-mat-bold w-full ml-4">
+                    <form #replyForm="ngForm"
+                          (ngSubmit)="reply($event)"
+                          (keydown.enter)="reply($event)" style="display: flex!important; width: 100%!important;">
+                        <div class="flex items-center h-11 my-px">
+                            <button
+                                *ngIf="!fileSelected"
+                                class="ml-0.5"
+                                mat-icon-button
+                                (click)="fileInput.click()">
+                                <mat-icon [svgIcon]="'heroicons_outline:paper-clip'"></mat-icon>
+                            </button>
+                            <button
+                                *ngIf="fileSelected"
+                                mat-icon-button
+                                class="ml-0.5"
+                                (click)="fileInput.click()">
+                                <img [src]="imageURL" alt="">
+                            </button>
+                            <input hidden type="file"
+                                   #fileInput (change)="uploadFile(fileInput.files)"/>
+                        </div>
+
+                        <mat-form-field
+                            class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded fuse-mat-bold w-full ml-4">
                         <textarea
                             class="min-h-5 my-0 resize-none"
                             style="margin: 11px 0 !important; padding: 0 !important;"
                             [rows]="1"
+                            name="message"
                             matInput
                             #messageInput></textarea>
-                    </mat-form-field>
-                    <div class="flex items-center h-11 my-px ml-4">
-                        <button
-                            mat-icon-button>
-                            <mat-icon
-                                class="transform rotate-90"
-                                [svgIcon]="'heroicons_outline:paper-airplane'"></mat-icon>
-                        </button>
-                    </div>
+                        </mat-form-field>
+                        <div class="flex items-center h-11 my-px ml-4">
+                            <button
+                                mat-icon-button>
+                                <mat-icon
+                                    class="transform rotate-90"
+                                    [svgIcon]="'heroicons_outline:paper-airplane'"></mat-icon>
+                            </button>
+                        </div>
+                    </form>
+
                 </div>
 
             </mat-drawer-content>
@@ -183,7 +204,9 @@
             <mat-icon
                 class="icon-size-24"
                 [svgIcon]="'iconsmind:speach_bubble'"></mat-icon>
-            <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">Select a conversation or start a new chat</div>
+            <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">Select a conversation or start a new
+                chat
+            </div>
         </div>
     </ng-template>
 
@@ -192,7 +215,9 @@
     <ng-template #speechBubbleExtension>
         <svg width="100%" height="100%" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
             <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                <path d="M1.01522827,0.516204834 C-8.83532715,54.3062744 61.7609863,70.5215302 64.8009949,64.3061218 C68.8074951,54.8859711 30.1663208,52.9997559 37.5036011,0.516204834 L1.01522827,0.516204834 Z" fill="currentColor" fill-rule="nonzero"></path>
+                <path
+                    d="M1.01522827,0.516204834 C-8.83532715,54.3062744 61.7609863,70.5215302 64.8009949,64.3061218 C68.8074951,54.8859711 30.1663208,52.9997559 37.5036011,0.516204834 L1.01522827,0.516204834 Z"
+                    fill="currentColor" fill-rule="nonzero"></path>
             </g>
         </svg>
     </ng-template>

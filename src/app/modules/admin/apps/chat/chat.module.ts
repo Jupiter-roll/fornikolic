@@ -17,6 +17,7 @@ import { ConversationComponent } from 'app/modules/admin/apps/chat/conversation/
 import { NewChatComponent } from 'app/modules/admin/apps/chat/new-chat/new-chat.component';
 import { ProfileComponent } from 'app/modules/admin/apps/chat/profile/profile.component';
 import {TranslocoModule} from "@ngneat/transloco";
+import {MaterialFileInputModule} from "ngx-mat-file-input";
 
 @NgModule({
     declarations: [
@@ -38,7 +39,8 @@ import {TranslocoModule} from "@ngneat/transloco";
         MatSidenavModule,
         FuseAutogrowModule,
         SharedModule,
-        TranslocoModule
+        TranslocoModule,
+        MaterialFileInputModule
     ]
 })
 export class ChatModule
