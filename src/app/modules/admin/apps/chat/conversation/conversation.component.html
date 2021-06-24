@@ -153,21 +153,14 @@
                           (keydown.enter)="reply($event)" style="display: flex!important; width: 100%!important;">
                         <div class="flex items-center h-11 my-px">
                             <button
-                                *ngIf="!fileSelected"
                                 class="ml-0.5"
                                 mat-icon-button
                                 (click)="fileInput.click()">
                                 <mat-icon [svgIcon]="'heroicons_outline:paper-clip'"></mat-icon>
                             </button>
-                            <button
-                                *ngIf="fileSelected"
-                                mat-icon-button
-                                class="ml-0.5"
-                                (click)="fileInput.click()">
-                                <img [src]="imageURL" alt="">
-                            </button>
+
                             <input hidden type="file"
-                                   #fileInput (change)="uploadFile(fileInput.files)"/>
+                                   #fileInput (change)="uploadFile(fileInput.files, $event)"/>
                         </div>
 
                         <mat-form-field

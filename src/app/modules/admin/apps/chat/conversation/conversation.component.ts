@@ -23,6 +23,7 @@ import {TopicModel} from "../../../../../store/topic/topic.model";
 import {FormBuilder, FormGroup, NgForm} from "@angular/forms";
 import { v4 as uuidv4 } from 'uuid';
 import {AddMessage} from "../../../../../store/message/message.actions";
+import {toBase64String} from "@angular/compiler/src/output/source_map";
 
 @Component({
     selector: 'chat-conversation',
@@ -52,6 +53,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
     fileSelected = false;
     file: File | null = null;
     imageURL: string;
+    uploadedFileStyle: any;
     /**
      * Constructor
      */
@@ -218,9 +220,8 @@ export class ConversationComponent implements OnInit, OnDestroy {
     }
 
     reply(event): void {
-        console.log(this.replyForm)
         event.preventDefault();
-        if (event.target.value === '') {
+        if (event.target.value === '' || event.target.value === undefined) {
             return;
         }
         let replyMessage = {
@@ -228,17 +229,32 @@ export class ConversationComponent implements OnInit, OnDestroy {
             channelId: this.topic.data.channelId,
             topicId: this.topic.id,
             text: event.target.value,
+            attachments: this.uploadedFileStyle
         };
         this.store.dispatch(new AddMessage(replyMessage))
         this.messageInput.nativeElement.value = ''
     };
 
-    uploadFile(files: FileList | null): void {
+    uploadFile(files: FileList | null, event: any): void {
         if (files) {
+            let base64String = ''
             this.fileSelected = true
             this.file = files.item(0);
-            console.log(this.file, '=???????? selected file')
+            let reader = new FileReader();
+            reader.onload = function () {
+                if (typeof reader.result === "string") {
+                    base64String = reader.result.replace("data:", "")
+                        .replace(/^.+,/, "");
+                }
+            }
+            reader.readAsDataURL(this.file)
+            this.uploadedFileStyle = [{
+                filename: this.file.name,
+                contentType: this.file.type,
+                contentBase64: base64String
+            }]
         }
     };
+
 
 }
