@@ -23,6 +23,7 @@ import {MessageState} from "./store/message/message.state";
 import {SocketIoConfig, SocketIoModule} from "ngx-socket-io";
 import { TopicComponent } from './modules/admin/apps/topic/topic.component';
 import {TopicModule} from "./modules/admin/apps/topic/topic.module";
+import {SocketService} from "../@fuse/config/socket.service";
 
 const routerConfig: ExtraOptions = {
     scrollPositionRestoration: 'enabled',
@@ -35,7 +36,9 @@ const config: SocketIoConfig = {
         query: {
             token: environment.authorizationToken
         },
-        transports: ['websocket']
+        transports: ['websocket'],
+        upgrade: false,
+        secure: false,
     }
 };
 
@@ -73,7 +76,8 @@ const config: SocketIoConfig = {
     ],
     bootstrap   : [
         AppComponent
-    ]
+    ],
+    providers: [SocketService]
 })
 export class AppModule
 {

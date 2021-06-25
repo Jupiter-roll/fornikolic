@@ -4,8 +4,7 @@ import {Socket} from 'ngx-socket-io';
 import {AddMessage, FetchMessage, MessageUpdate} from './message.actions';
 import {MessageModel} from './message.model';
 import {MessageService} from './message.service';
-import {environment} from "../../../environments/environment";
-import {map} from "rxjs/operators";
+import {SocketService} from "../../../@fuse/config/socket.service";
 
 export interface MessageStateModel {
     messageList: MessageModel[],
@@ -25,7 +24,8 @@ export class MessageState implements NgxsOnInit {
     constructor(
         private store: Store,
         private messageService: MessageService,
-        private socket: Socket
+        private socket: Socket,
+        private socketService: SocketService
     ) {
         this.socket.on('*', () => {
             console.log('connect to->>>>>>>>>>>>>>>>>>>>>>>>>>>: ')
@@ -34,10 +34,6 @@ export class MessageState implements NgxsOnInit {
         this.getEventListener().subscribe(() => {
             console.log(123)
         });
-
-        // this.socket.on('connect_error', (e) => {
-        //     console.log('error connecting web socket server', e);
-        // });
 
         this.socket.on('reconnect', (data) => {
             console.log('reconnected!', data);
@@ -59,7 +55,7 @@ export class MessageState implements NgxsOnInit {
     }
 
     ngxsOnInit() {
-
+        this.socketService.setupSocketConnection();
     }
 
 

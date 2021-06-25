@@ -11,7 +11,7 @@ import {
     ViewEncapsulation
 } from '@angular/core';
 import {Observable, Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {takeUntil, window} from 'rxjs/operators';
 import {FuseMediaWatcherService} from '@fuse/services/media-watcher';
 import {Chat} from 'app/modules/admin/apps/chat/chat.types';
 import {ChatService} from 'app/modules/admin/apps/chat/chat.service';
@@ -23,7 +23,6 @@ import {TopicModel} from "../../../../../store/topic/topic.model";
 import {FormBuilder, FormGroup, NgForm} from "@angular/forms";
 import { v4 as uuidv4 } from 'uuid';
 import {AddMessage} from "../../../../../store/message/message.actions";
-import {toBase64String} from "@angular/compiler/src/output/source_map";
 
 @Component({
     selector: 'chat-conversation',
@@ -44,6 +43,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
     contact: any;
     replyInput: any;
     topic: TopicModel;
+    selectedTopicId: string;
     selectedChat: any;
     myMessageNum: number;
     compId: string;
@@ -54,6 +54,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
     file: File | null = null;
     imageURL: string;
     uploadedFileStyle: any;
+    uploadedFileStyleStatus: boolean = false
     /**
      * Constructor
      */
@@ -134,7 +135,16 @@ export class ConversationComponent implements OnInit, OnDestroy {
             });
 
         this.selectedTopic.subscribe(data => {
-                this.topic = data
+                this.topic = data;
+                if (data) {
+                    if (this.selectedTopicId !== data.id) {
+                        this.selectedTopicId = data.id;
+                        this.uploadedFileStyleStatus = false;
+                        this._changeDetectorRef.detectChanges();
+                    } else {
+                        console.log('here')
+                    }
+                }
             });
 
         this.getMessage
@@ -224,6 +234,11 @@ export class ConversationComponent implements OnInit, OnDestroy {
         if (event.target.value === '' || event.target.value === undefined) {
             return;
         }
+        if (!this.topic) {
+            alert('select topic');
+            this.messageInput.nativeElement.value = ''
+            return;
+        }
         let replyMessage = {
             id: uuidv4(),
             channelId: this.topic.data.channelId,
@@ -235,7 +250,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
         this.messageInput.nativeElement.value = ''
     };
 
-    uploadFile(files: FileList | null, event: any): void {
+    uploadFile(files: FileList | null): void {
         if (files) {
             let base64String = ''
             this.fileSelected = true
@@ -248,13 +263,21 @@ export class ConversationComponent implements OnInit, OnDestroy {
                 }
             }
             reader.readAsDataURL(this.file)
-            this.uploadedFileStyle = [{
-                filename: this.file.name,
-                contentType: this.file.type,
-                contentBase64: base64String
-            }]
+            setTimeout(() => {
+                this.uploadedFileStyle = [{
+                    filename: this.file.name,
+                    contentType: this.file.type,
+                    contentBase64: base64String
+                }];
+                this.uploadedFileStyleStatus = true;
+                this._changeDetectorRef.detectChanges();
+            }, 400)
         }
     };
+
+    removeAttach = () => {
+        this.uploadedFileStyleStatus = false
+    }
 
 
 }

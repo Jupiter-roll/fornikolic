@@ -1,10 +1,8 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {BooleanInput} from '@angular/cdk/coercion';
 import {Observable, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {FuseVerticalNavigationComponent} from '@fuse/components/navigation/vertical/vertical.component';
 import {FuseNavigationService} from '@fuse/components/navigation/navigation.service';
-import {FuseNavigationItem} from '@fuse/components/navigation/navigation.types';
 import {Select, Store} from "@ngxs/store";
 import {ChannelState} from "../../../../../../app/store/channel/channel.state";
 import {ChannelModel} from "../../../../../../app/store/channel/channel.model";
@@ -18,7 +16,6 @@ import {ChangeChannel} from "../../../../../../app/store/channel/channel.actions
 })
 export class FuseVerticalNavigationGroupItemComponent implements OnInit, OnDestroy {
     /* eslint-disable @typescript-eslint/naming-convention */
-    static ngAcceptInputType_autoCollapse: BooleanInput;
     /* eslint-enable @typescript-eslint/naming-convention */
     @Input() autoCollapse: boolean;
     @Input() item: any;
@@ -56,7 +53,7 @@ export class FuseVerticalNavigationGroupItemComponent implements OnInit, OnDestr
 
                 this._changeDetectorRef.markForCheck();
             });
-        }, 500)
+        }, 1000)
     }
 
     /**

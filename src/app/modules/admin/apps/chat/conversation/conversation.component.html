@@ -146,6 +146,13 @@
                     </div>
                 </div>
 
+                <div *ngIf="uploadedFileStyleStatus" class="flex items-end pr-4 pl-4 bg-gray-50 dark:bg-transparent justify-between">
+                    <div class="flex">
+                        <mat-icon [svgIcon]="'heroicons_outline:document-text'" class="w-10 h-10"></mat-icon>
+                        <span class="mt-3 mr-5" >{{uploadedFileStyle[0].filename}}</span>
+                    </div>
+                    <mat-icon [svgIcon]="'heroicons_outline:x'" class="mb-3" (click)="removeAttach()"></mat-icon>
+                </div>
                 <!-- Message field -->
                 <div class="flex items-end p-4 border-t bg-gray-50 dark:bg-transparent">
                     <form #replyForm="ngForm"
@@ -160,7 +167,7 @@
                             </button>
 
                             <input hidden type="file"
-                                   #fileInput (change)="uploadFile(fileInput.files, $event)"/>
+                                   #fileInput (change)="uploadFile(fileInput.files)"/>
                         </div>
 
                         <mat-form-field
@@ -173,14 +180,14 @@
                             matInput
                             #messageInput></textarea>
                         </mat-form-field>
-                        <div class="flex items-center h-11 my-px ml-4">
-                            <button
-                                mat-icon-button>
-                                <mat-icon
-                                    class="transform rotate-90"
-                                    [svgIcon]="'heroicons_outline:paper-airplane'"></mat-icon>
-                            </button>
-                        </div>
+<!--                        <div class="flex items-center h-11 my-px ml-4">-->
+<!--                            <button-->
+<!--                                mat-icon-button>-->
+<!--                                <mat-icon-->
+<!--                                    class="transform rotate-90"-->
+<!--                                    [svgIcon]="'heroicons_outline:paper-airplane'"></mat-icon>-->
+<!--                            </button>-->
+<!--                        </div>-->
                     </form>
 
                 </div>
