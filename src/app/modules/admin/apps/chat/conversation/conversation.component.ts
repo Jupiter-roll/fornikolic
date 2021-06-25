@@ -247,7 +247,8 @@ export class ConversationComponent implements OnInit, OnDestroy {
             attachments: this.uploadedFileStyle
         };
         this.store.dispatch(new AddMessage(replyMessage))
-        this.messageInput.nativeElement.value = ''
+        this.messageInput.nativeElement.value = '';
+        this.uploadedFileStyleStatus = false;
     };
 
     uploadFile(files: FileList | null): void {
@@ -278,6 +279,5 @@ export class ConversationComponent implements OnInit, OnDestroy {
     removeAttach = () => {
         this.uploadedFileStyleStatus = false
     }
-
 
 }

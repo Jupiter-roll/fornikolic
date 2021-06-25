@@ -103,6 +103,7 @@
                                     <div class="flex-auto border-b"></div>
                                 </div>
                             </ng-container>
+
                             <div
                                 class="flex flex-col"
                                 [ngClass]="{'items-end': message.system.userId,
@@ -110,6 +111,16 @@
                                         'mt-0.5': i > 0 && message.system.userId === user,
                                         'mt-3': i > 0 && message.system.userId !== user}">
                                 <!-- Bubble -->
+                                <ng-container *ngIf="message.data.attachments && message.data.attachments[0]" >
+                                    <div class="min-w-4 leading-5" (click)="downloadAttach.click()">
+                                        <mat-icon [svgIcon]="'heroicons_outline:document-text'" class="w-15 h-15"></mat-icon>
+                                    </div>
+                                    <div
+                                        class="min-w-4 leading-5 mb-3"
+                                        [innerHTML]="message.data.attachments[0].filename">
+                                    </div>
+                                    <a #downloadAttach [href]="message.data.attachments[0].url" target="_blank"></a>
+                                </ng-container>
                                 <div
                                     class="relative max-w-3/4 px-3 py-2 rounded-lg"
                                     [ngClass]="{'bg-blue-500 text-blue-50': message.system.userId,
@@ -124,6 +135,7 @@
                                         </div>
                                     </ng-container>
                                     <!-- Message -->
+
                                     <div
                                         class="min-w-4 leading-5"
                                         [innerHTML]="message.data.text">
