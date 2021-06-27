@@ -7,7 +7,9 @@ export class SocketService {
     }
 
     setupSocketConnection() {
-        this.socket = io(environment.websocketUrl, {forceNew: true});
+        this.socket = io(environment.websocketUrl,
+            {forceNew: true, transports: ['websocket']}
+            );
         this.socket.emit('my message', 'Hello there from Angular')
     }
 }
