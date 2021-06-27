@@ -5,7 +5,7 @@
     "private": true,
     "scripts": {
         "ng": "ng",
-        "start": "ng serve --port 8000",
+        "start": "ng serve --port 9000",
         "build": "ng build",
         "test": "ng test",
         "lint": "ng lint",

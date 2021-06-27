@@ -48,7 +48,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
     myMessageNum: number;
     compId: string;
     @Select(TopicState.getSelectedTopic) selectedTopic: Observable<TopicModel>;
-    @Select(MessageState.getMessageList) getMessage: Observable<MessageModel>;
+    @Select(MessageState.getMessageList) getMessage: Observable<any>;
     accept: 'application/x-zip-compressed,image/*';
     fileSelected = false;
     file: File | null = null;
@@ -150,22 +150,25 @@ export class ConversationComponent implements OnInit, OnDestroy {
         this.getMessage
             .subscribe(async chatData => {
                 this.myMessageNum = 0;
-                if ( chatData )
-                {
-                    this.selectedChat = chatData;
-                    this.readyToReply();
-                }
-                let data = [];
-                for (let item in chatData) {
-                    if (chatData[item].system.userId !== localStorage.getItem('userId')) {
-                        this.compId = chatData[item].system.userId;
-                    }
-                    await data.push(chatData[item]);
-                }
-                this.myMessageNum = data.length - 1;
-                this._changeDetectorRef.detectChanges();
+               if (chatData && chatData.length > 0) {
+                   if ( chatData )
+                   {
+                       this.selectedChat = chatData;
+                       this.readyToReply();
+                   }
+                   let data = [];
+                   for (let item in chatData) {
+                       console.log(chatData[item].system.userId, this.user)
+                       if (chatData[item].system.userId !== this.user) {
+                           this.compId = chatData[item].system.userId;
+                       }
+                       await data.push(chatData[item]);
+                   }
+                   this.myMessageNum = data.length - 1;
+                   this._changeDetectorRef.detectChanges();
+               }
+               console.log(this.compId, '=???????????????/')
             });
-        console.log(this.compId, this.user)
     }
 
     /**
